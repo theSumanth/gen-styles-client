@@ -1,68 +1,95 @@
-/* :root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+:root {
+  --bg-primary: #ffffff;
+  --bg-primary--shade--one: #f5f5f5;
+  --bg-primary--shade--two: #ebebeb;
+  --bg-primary--shade--three: #d9d9d9;
+  --bg-primary--shade--four: #bfbfbf;
+  --bg-secondary: #fafafa;
+  --bg-secondary--shade--one: #f0f0f0;
+  --bg-secondary--shade--two: #e6e6e6;
+  --bg-secondary--shade--three: #d4d4d4;
+  --bg-secondary--shade--four: #bababa;
+  --bg-tertiary: #ececec;
+  --bg-tertiary--shade--one: #e2e2e2;
+  --bg-tertiary--shade--two: #d8d8d8;
+  --bg-tertiary--shade--three: #c6c6c6;
+  --bg-tertiary--shade--four: #acacac;
+  --hairline-regular: #eaeaea;
+  --hairline-regular--shade--one: #e0e0e0;
+  --hairline-regular--shade--two: #d6d6d6;
+  --hairline-regular--shade--three: #c4c4c4;
+  --hairline-regular--shade--four: #aaaaaa;
+  --hairline-strong: #d4d4d4;
+  --hairline-strong--shade--one: #cacaca;
+  --hairline-strong--shade--two: #c0c0c0;
+  --hairline-strong--shade--three: #aeaeae;
+  --hairline-strong--shade--four: #949494;
+  --content-primary: #505050;
+  --content-primary--shade--one: #5a5a5a;
+  --content-primary--shade--two: #646464;
+  --content-primary--shade--three: #767676;
+  --content-primary--shade--four: #909090;
+  --content-secondary: #808080;
+  --content-secondary--shade--one: #767676;
+  --content-secondary--shade--two: #6c6c6c;
+  --content-secondary--shade--three: #5a5a5a;
+  --content-secondary--shade--four: #404040;
+  --content-tertiary: #a9a9a9;
+  --content-tertiary--shade--one: #9f9f9f;
+  --content-tertiary--shade--two: #959595;
+  --content-tertiary--shade--three: #838383;
+  --content-tertiary--shade--four: #696969;
+  --brand-primary: #f26b3a;
+  --brand-primary--highlight: rgba(242, 107, 58, 0.2);
+  --brand-primary--shade--one: #f15d27;
+  --brand-primary--shade--two: #ef4e14;
+  --brand-primary--shade--three: #d2420e;
+  --brand-primary--shade--four: #a2330b;
+  --brand-secondary: #097bed;
+  --brand-secondary--highlight: rgba(9, 123, 237, 0.2);
+  --brand-secondary--shade--one: #1485f6;
+  --brand-secondary--shade--two: #288ff7;
+}
+:root {
+  --min-editor-height: calc(var(--size-m) * 10);
+}
+:root {
+  --max-editor-height: calc(100vh - 350px);
+}
+:root {
+  --text-font-regular: "Inter", "OpenSans", Helvetica, Arial, sans-serif;
+  --text-font-code: "IBMPlexMono", "Cousine", monospace;
+  --text-font-size-xs: 10px;
+  --text-font-size-s: 11px;
+  --text-font-size-m: 12px;
+  --text-font-size-l: 14px;
+  --text-font-size-xl: 16px;
+  --text-font-size-xxl: 18px;
+  --text-font-size-xxxl: 24px;
+  --text-line-height-xs: 12px;
+  --text-line-height-s: 16px;
+  --text-line-height-m: 20px;
+  --text-line-height-l: 24px;
+  --text-line-height-xl: 28px;
+  --text-line-height-xxl: 32px;
+  --text-line-height-xxxl: 40px;
+  --text-font-weight-regular: 400;
+  --text-font-weight-medium: 600;
+  --text-font-weight-bold: 600;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+html body {
+  color: var(--content-color-secondary);
+  font-size: var(--text-size-m, 14px);
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
-  min-height: 100vh;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI,
+    Roboto, Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica, Arial,
+    sans-serif;
+  font-feature-settings: "calt" 0;
 }
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
-}
-
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
-} */
