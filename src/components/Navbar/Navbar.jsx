@@ -23,7 +23,7 @@ const Navbar = () => {
         <NavLink to={"/auth?mode=login"} end>
           <Button
             className={
-              "hidden md:block text-white bg-purple-700 text-base whitespace-nowrap rounded-full"
+              "hidden md:block text-white bg-customBlue text-base whitespace-nowrap rounded-full"
             }
           >
             Log In

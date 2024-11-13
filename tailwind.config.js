@@ -9,6 +9,9 @@ export default {
         dynalight: ["Dynalight", "cursive"],
         lobster: ["Lobster", "sans-serif"],
       },
+      colors: {
+        customBlue: "#746eea",
+      },
     },
   },
   plugins: [],

@@ -11,9 +11,9 @@ const Auth = () => {
   const authHeading = authMode === "login" ? "Log In" : "Sign Up";
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-[#f6f3ff] to-[#cd9cf2] pt-20 md:pt-32">
+    <div className="min-h-screen bg-neutral-100 pt-20 md:pt-32">
       <main className="m-auto flex flex-col gap-2 justify-center items-center bg-white w-80 md:w-[22rem] py-4 px-6 rounded-md shadow-lg">
-        <h1 className="font-bold text-xl text-purple-700 pb-2">
+        <h1 className="font-bold text-xl text-customBlue pb-2">
           {authHeading}
         </h1>
         {authMode !== "login" && (
@@ -38,7 +38,7 @@ const Auth = () => {
           type="password"
         />
         <Button
-          className={"text-white bg-purple-700 w-full rounded-md text-xs"}
+          className={"text-white bg-customBlue w-full rounded-md text-xs"}
         >
           {authHeading}
         </Button>
@@ -48,7 +48,7 @@ const Auth = () => {
               Already have an account?{" "}
               <NavLink
                 to={"/auth?mode=login"}
-                className={"text-purple-700 font-medium underline"}
+                className={"text-customBlue font-medium underline"}
               >
                 Log In here.
               </NavLink>
@@ -58,7 +58,7 @@ const Auth = () => {
               Don&apos;t have an account?{" "}
               <NavLink
                 to={"/auth?mode=signup"}
-                className={"text-purple-700 font-medium underline"}
+                className={"text-customBlue font-medium underline"}
               >
                 Sign Up here.
               </NavLink>
