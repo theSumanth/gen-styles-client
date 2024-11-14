@@ -1,10 +1,37 @@
 import { motion } from "framer-motion";
+import { useState } from "react";
 
 import stars from "../../assets/stars.png";
+import aiSearchImg from "../../assets/search.png";
 
 const Searchbar = () => {
+  const [animateSearchbar, setAnimateSearchbar] = useState(false);
+
+  const rainbowShadow = [
+    "0px 8px 16px -2px rgba(0, 0, 255, 0.3)", // Blue
+    "0px 8px 16px -2px rgba(255,92,205, 0.5)", // pink
+    "0px 8px 16px -2px rgba(116, 110, 234, 0.5)", // customblue
+  ];
+
+  const handleSearchClick = () => {
+    setAnimateSearchbar((prev) => !prev);
+  };
+
   return (
-    <div className="relative w-[80%] md:w-[50%] flex justify-center items-center">
+    <motion.div
+      animate={{
+        boxShadow: animateSearchbar ? rainbowShadow : "",
+        borderRadius: "80px",
+      }}
+      transition={{
+        duration: 2,
+        ease: "easeInOut",
+        times: [0, 0.34, 0.51, 0.68, 1],
+        repeat: animateSearchbar ? Infinity : 0,
+        repeatType: "mirror",
+      }}
+      className="relative w-[80%] md:w-[50%] flex justify-center items-center"
+    >
       <input
         type="text"
         className="w-full h-10 rounded-full py-0 pl-10 pr-12 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
@@ -17,25 +44,27 @@ const Searchbar = () => {
           className="w-5 h-5 object-cover filter brightness-0 opacity-50"
         />
       </div>
-      {/* <div className="absolute left-0 h-10 rounded-full px-3 text-neutral-600 font-medium flex items-center justify-center">
-        ✨
-      </div> */}
       <motion.button
         initial={{ scale: 0.8, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring" }}
+        onClick={handleSearchClick}
         className="absolute right-0 h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
       >
         <motion.img
-          src={stars}
+          src={aiSearchImg}
           alt="ai sparkle icon"
-          initial={{ scale: 1.4, color: "blue" }}
-          animate={{ scale: 1, color: "white" }}
-          transition={{ duration: 2 }}
+          initial={{ scale: 1.4 }}
+          animate={{ scale: 1, transition: { duration: 2 } }}
+          whileHover={{
+            scale: 1.3,
+            transition: { duration: 0.2, ease: "easeInOut" },
+          }}
+          // transition={{ duration: 2 }}
           className="w-5 h-5 filter invert brightness-0"
         />
       </motion.button>
-    </div>
+    </motion.div>
   );
 };
 
