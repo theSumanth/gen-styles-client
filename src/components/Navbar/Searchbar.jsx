@@ -21,23 +21,21 @@ const Searchbar = () => {
     <motion.div
       animate={{
         boxShadow: animateSearchbar ? rainbowShadow : "",
-        borderRadius: "80px",
       }}
       transition={{
         duration: 2,
         ease: "easeInOut",
-        times: [0, 0.34, 0.51, 0.68, 1],
-        repeat: animateSearchbar ? Infinity : 0,
-        repeatType: "mirror",
+        repeat: Infinity,
+        repeatType: "loop",
       }}
-      className="relative w-[80%] md:w-[50%] flex justify-center items-center"
+      className="relative w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full"
     >
       <input
         type="text"
-        className="w-full h-10 rounded-full py-0 pl-10 pr-12 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
+        className="w-full h-14 rounded-full pl-12 pr-14 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
         placeholder="Search GenStyles"
       />
-      <div className="absolute left-0 h-10 rounded-full px-3 text-neutral-600 font-medium flex items-center justify-center">
+      <div className="absolute left-2 h-10 rounded-full px-3 text-neutral-600 font-medium flex items-center justify-center">
         <img
           src={stars}
           alt="ai sparkle icon"
@@ -49,7 +47,7 @@ const Searchbar = () => {
         animate={{ scale: 1, opacity: 1 }}
         transition={{ type: "spring" }}
         onClick={handleSearchClick}
-        className="absolute right-0 h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
+        className="absolute right-2 h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
       >
         <motion.img
           src={aiSearchImg}
@@ -59,6 +57,10 @@ const Searchbar = () => {
           whileHover={{
             scale: 1.3,
             transition: { duration: 0.2, ease: "easeInOut" },
+          }}
+          whileTap={{
+            scale: 0.99,
+            transition: { duration: 0.4, ease: "easeInOut" },
           }}
           // transition={{ duration: 2 }}
           className="w-5 h-5 filter invert brightness-0"

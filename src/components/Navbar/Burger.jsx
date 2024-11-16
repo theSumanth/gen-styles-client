@@ -4,7 +4,7 @@ const Burger = () => {
   return (
     <div className="md:hidden w-full flex justify-center items-center">
       <button>
-        <Menu color="#7e22ce" />
+        <Menu color="#746eea" />
       </button>
     </div>
   );

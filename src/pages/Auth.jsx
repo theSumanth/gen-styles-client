@@ -14,7 +14,7 @@ const Auth = () => {
   const authHeading = authMode === "login" ? "Log In" : "Sign Up";
 
   return (
-    <div className="bg-neutral-100 pt-20 md:pt-32">
+    <div className="bg-customBackground pt-20 md:pt-28">
       <motion.main
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}

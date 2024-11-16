@@ -4,13 +4,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        roboto: ["Roboto", "sans-serif"],
+        poppins: ["Playwrite NL", "sans-serif"],
         playwrite: ["Playwrite NL", "sans-serif"],
-        dynalight: ["Dynalight", "cursive"],
-        lobster: ["Lobster", "sans-serif"],
       },
       colors: {
         customBlue: "#746eea",
+        customBackground: "#f5f5f5",
+      },
+      screens: {
+        "custom-range": { max: "848px", min: "768px" },
       },
     },
   },

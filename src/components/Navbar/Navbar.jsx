@@ -4,17 +4,18 @@ import Button from "../UI/Button";
 import Logo from "./Logo";
 import Searchbar from "./Searchbar";
 import Burger from "./Burger";
+import CartButton from "../UI/CartButton";
 
 const Navbar = () => {
   return (
-    <nav className="flex flex-row w-full justify-between px-2 py-4 md:px-6 bg-neutral-100 border-b-2 border-neutral-200">
+    <nav className="flex flex-row w-full justify-between px-2 py-2 md:px-6 bg-customBackground border-b-2 border-neutral-200">
       <Logo />
       <Searchbar />
-      <div className="flex flex-row md:gap-2 w-[10%] md:w-[20%] justify-end">
+      <div className="flex flex-row md:gap-2 w-[10%] md:w-[25%] justify-end items-center">
         <NavLink to={"/auth?mode=signup"} end>
           <Button
             className={
-              "hidden md:block hover:bg-neutral-100 hover:border-neutral-200 text-base whitespace-nowrap rounded-full"
+              "hidden md:block hover:bg-customBackground hover:border-neutral-200 text-base whitespace-nowrap rounded-full"
             }
           >
             Sign Up
@@ -29,7 +30,11 @@ const Navbar = () => {
             Log In
           </Button>
         </NavLink>
-
+        <CartButton
+          label={"Cart"}
+          showCartQuantity
+          className={"relative hidden md:flex ml-2"}
+        />
         <Burger />
       </div>
     </nav>

@@ -1,18 +1,25 @@
 import { NavLink } from "react-router-dom";
 
+import gslogo from "../../assets/gsLogo.png";
 import { Sparkle } from "lucide-react";
-import stars from "../../assets/stars.png";
 
 const Logo = () => {
   return (
     <>
-      <div className="flex justify-center mx-1 md:justify-start w-[10%] md:hidden items-center">
-        <img src={stars} alt="AI icon" className="w-6 h-6 md:hidden" />
-      </div>
+      <NavLink
+        to={"/"}
+        className="flex justify-center mx-1 md:justify-start w-[10%] md:hidden items-center"
+      >
+        <img
+          src={gslogo}
+          alt="AI icon"
+          className="w-9 h-9 sm:w-10 sm:h-10 md:hidden"
+        />
+      </NavLink>
       <NavLink
         to={"/"}
         end
-        className="hidden md:flex w-[20%] justify-start items-center"
+        className="hidden md:flex w-[25%] custom-range:w-[10%] justify-start items-center"
       >
         <span className="inline-block text-xs md:text-base">
           <Sparkle className="w-4 h-4 md:w-6 md:h-6" />

@@ -4,7 +4,7 @@ import Navbar from "../components/Navbar";
 const RootLayout = () => {
   return (
     <>
-      <div className="bg-neutral-100 h-screen">
+      <div className="bg-customBackground h-screen">
         <Navbar />
         <Outlet />
       </div>
