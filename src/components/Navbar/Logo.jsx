@@ -27,7 +27,7 @@ const Logo = () => {
         <span className="inline-block font-roboto text-xl md:text-3xl font-black">
           Gen
         </span>
-        <span className="inline-block font-playwrite text-xs text-purple-800 font-medium md:text-base md:mt-1">
+        <span className="inline-block font-playwrite text-xs text-customBlue font-semibold md:text-base md:mt-1">
           Styles
         </span>
       </NavLink>

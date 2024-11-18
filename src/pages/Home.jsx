@@ -3,13 +3,22 @@ import CustomSquareButton from "../components/UI/CustomSquareButton";
 
 const HomePage = () => {
   return (
-    <section>
+    <section className="flex flex-col gap-2">
       <section className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4">
         <ProductList listHeading={"Trending Products"} />
         <CustomSquareButton
-          label={"more"}
+          label={"show more"}
           className={
-            "absolute top-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
+            "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
+          }
+        />
+      </section>
+      <section className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4">
+        <ProductList listHeading={"Personalized Products"} />
+        <CustomSquareButton
+          label={"show more"}
+          className={
+            "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
           }
         />
       </section>
