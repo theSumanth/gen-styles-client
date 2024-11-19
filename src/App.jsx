@@ -10,6 +10,7 @@ import "./App.css";
 import RootLayout from "./pages/Root";
 import HomePage from "./pages/Home";
 import Auth from "./pages/Auth";
+import CartLayout from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import UserContextProvider from "./store/UserContextProvider";
 import { queryClient } from "./util/http";
@@ -19,6 +20,7 @@ const routeDefinitions = createRoutesFromElements(
     <Route path="/" element={<RootLayout />}>
       <Route index element={<HomePage />} />
       <Route path=":productId" element={<ProductDetail />} />
+      <Route path="cart" element={<CartLayout />} />
       <Route path="auth" element={<Auth />} />
     </Route>
   </Route>

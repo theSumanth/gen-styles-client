@@ -12,8 +12,7 @@ const CustomSquareButton = ({
       }`}
       {...props}
     >
-      {LucideIcon && <LucideIcon size={16} />}{" "}
-      <span className="font-medium">{label}</span>
+      {LucideIcon && <LucideIcon size={16} />} <span className="">{label}</span>
       {children}
     </button>
   );

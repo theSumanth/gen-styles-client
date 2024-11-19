@@ -152,7 +152,7 @@ const Auth = () => {
           whileTap={{ scale: 0.99 }}
           disabled={isAuthSubmitting}
           className={
-            "text-white bg-customBlue w-full rounded-md text-xs disabled:bg-opacity-15"
+            "text-white bg-customBlue w-full rounded-md text-xs disabled:bg-opacity-80"
           }
         >
           {authActionBtnLabel}
