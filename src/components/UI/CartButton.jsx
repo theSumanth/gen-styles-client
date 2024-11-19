@@ -20,13 +20,18 @@ const CartButton = ({
     cart: { quantity },
   } = cartContext;
 
+  const { onClick: propsOnClick, ...restProps } = props;
   return (
     <CustomSquareButton
       label={label}
-      onClick={() => addToCart(productData)}
+      onClick={
+        showCartQuantity && propsOnClick
+          ? propsOnClick
+          : () => addToCart(productData)
+      }
       LucideIcon={ShoppingBag}
       className={className}
-      {...props}
+      {...restProps}
     >
       {showCartQuantity && (
         <motion.span

@@ -22,12 +22,12 @@ const RootLayout = () => {
   }, [data, userContext]);
 
   return (
-    <>
-      <div className="bg-customBackground h-screen">
-        <Navbar isAuthenticated={userContext.isAuthenticated} />
+    <div className="bg-customBackground min-h-screen flex flex-col">
+      <Navbar isAuthenticated={userContext.isAuthenticated} />
+      <div className="mt-[4.5rem] flex-grow">
         <Outlet />
       </div>
-    </>
+    </div>
   );
 };
 

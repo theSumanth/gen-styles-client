@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "../UI/Button";
@@ -64,14 +64,17 @@ function LogoutActionButton() {
 }
 
 const Navbar = ({ isAuthenticated }) => {
+  const navigate = useNavigate();
+
   return (
-    <nav className="flex flex-row w-full justify-between px-2 py-2 md:px-6 bg-customBackground border-b-2 border-neutral-200">
+    <nav className="fixed z-50 flex flex-row w-full justify-between px-2 py-2 md:px-6 bg-customBackground border-b-2 border-neutral-200">
       <Logo />
       <Searchbar />
       <div className="flex flex-row md:gap-2 w-[10%] md:w-[25%] justify-end items-center">
         {!isAuthenticated && <AuthActionButtons />}
 
         <CartButton
+          onClick={() => navigate("/cart")}
           label={"Cart"}
           showCartQuantity
           className={"relative hidden md:flex ml-2"}

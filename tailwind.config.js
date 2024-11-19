@@ -13,6 +13,7 @@ export default {
       },
       screens: {
         "custom-range": { max: "848px", min: "768px" },
+        "not-mobile-view": { max: "1800px", min: "520px" },
       },
     },
   },
