@@ -1,8 +1,11 @@
-import { axiosApi, handleError } from "./http";
+import { axiosAuthApi } from "./api";
+import { handleError } from "./api";
+
+axiosAuthApi.defaults.headers.post["Content-Type"] = "application/json";
 
 export async function sigUp({ authData, signal }) {
   try {
-    const resData = await axiosApi.post("/auth/register", authData, {
+    const resData = await axiosAuthApi.post("/auth/register", authData, {
       signal: signal,
     });
     return resData.data;
@@ -13,7 +16,7 @@ export async function sigUp({ authData, signal }) {
 
 export async function logIn({ authData, signal }) {
   try {
-    const resData = await axiosApi.post("/auth/login", authData, {
+    const resData = await axiosAuthApi.post("/auth/login", authData, {
       signal: signal,
     });
     return resData.data;
@@ -24,7 +27,7 @@ export async function logIn({ authData, signal }) {
 
 export async function logOut({ authData, signal }) {
   try {
-    const resData = await axiosApi.post("/auth/logout", authData, {
+    const resData = await axiosAuthApi.post("/auth/logout", authData, {
       signal: signal,
     });
     return resData.data;
@@ -34,10 +37,10 @@ export async function logOut({ authData, signal }) {
 }
 
 export async function selfReq() {
-  try {
-    const resData = await axiosApi.get("/auth/self");
-    return resData.data;
-  } catch (error) {
-    handleError(error);
-  }
+  // try {
+  const resData = await axiosAuthApi.get("/auth/self");
+  return resData.data;
+  // } catch (error) {
+  //   handleError(error);
+  // }
 }

@@ -1,7 +1,11 @@
-import { Flame, Sparkles } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
 
-import { products } from "../../util/products";
+import { Flame, Sparkles } from "lucide-react";
 import ProductCard from "./ProductCard";
+import {
+  getTop20TrendProducts,
+  getPersonalizedProducts,
+} from "../../util/http";
 
 function SectionHeader({ listHeading }) {
   const LucideIcons = {
@@ -22,13 +26,34 @@ function SectionHeader({ listHeading }) {
 }
 
 const ProductList = ({ listHeading }) => {
+  const getProductsFn =
+    listHeading === "Trending Products"
+      ? getTop20TrendProducts
+      : getPersonalizedProducts;
+
+  const { data: fetchedData, isLoading } = useQuery({
+    queryKey: [`products ${listHeading}`],
+    queryFn: getProductsFn,
+  });
+
+  if (isLoading) return <>Loading...</>;
+  const fetchedProducts = fetchedData.data;
+  console.log(listHeading, fetchedProducts);
+
   return (
     <div className="mb-3">
       <SectionHeader listHeading={listHeading} />
       <ul className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 place-items-center p-4 px-11 md:px-0">
-        {products.map((product) => {
-          return <ProductCard key={product.id} productData={product} />;
-        })}
+        {fetchedData &&
+          fetchedProducts.map((product) => {
+            return (
+              <ProductCard
+                key={product._id}
+                productData={product}
+                productFromQueryKey={`products ${listHeading}`}
+              />
+            );
+          })}
       </ul>
     </div>
   );

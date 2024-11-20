@@ -14,7 +14,6 @@ const RootLayout = () => {
     queryFn: selfReq,
   });
 
-  console.log("root");
   useEffect(() => {
     if (data) {
       userContext.storeUser(data);

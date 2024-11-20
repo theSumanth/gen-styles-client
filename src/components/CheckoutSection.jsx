@@ -44,7 +44,7 @@ const CheckoutSection = () => {
       initial="hidden"
       animate="visible"
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="top-[6rem] sticky w-full lg:w-[40%] bg-white border border-neutral-300 rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
+      className="top-[6rem] sticky w-full lg:w-[40%] bg-white border border-neutral-300 rounded-xl not-mobile-view:rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
     >
       <div className="border-b border-neutral-300 pb-3">
         <h4 className="text-sm font-semibold">Coupon Code</h4>

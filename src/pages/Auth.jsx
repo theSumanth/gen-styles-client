@@ -55,7 +55,7 @@ const Auth = () => {
       userContext.storeUser(resData);
       navigate("/");
     },
-    onError: () => console.log("error"),
+    onError: (error) => console.log("Failed to login", error),
   });
 
   const handleSubmit = (e) => {
@@ -112,7 +112,7 @@ const Auth = () => {
               name="lastName"
               title="lastName"
             />
-            <div className="flex gap-3 justify-start items-center w-full">
+            {/* <div className="flex gap-3 justify-start items-center w-full">
               <span className="text-xs font-semibold text-neutral-500">
                 Gender
               </span>
@@ -134,7 +134,7 @@ const Auth = () => {
                 value={"female"}
                 id={"female"}
               />
-            </div>
+            </div> */}
           </>
         )}
 
