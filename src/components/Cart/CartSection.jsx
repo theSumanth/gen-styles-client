@@ -25,7 +25,7 @@ const CartSection = () => {
       initial="hidden"
       animate="visible"
       transition={{ duration: 0.5, ease: "easeInOut" }}
-      className="w-full overflow-y-auto lg:w-[60%] bg-white border border-neutral-300 rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
+      className="w-full overflow-y-auto lg:w-[60%] bg-white border border-neutral-300 rounded-xl not-mobile-view:rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
     >
       <div className="flex flex-row justify-between mb-4">
         <h2 className="text-normal font-medium">

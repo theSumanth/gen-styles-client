@@ -1,4 +1,5 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext({
@@ -8,12 +9,28 @@ export const CartContext = createContext({
   increaseItemQuantity: () => {},
   decreaseItemQuantity: () => {},
   clearCart: () => {},
+  syncCartFromBackend: () => {},
 });
 
 const CartContextProvider = ({ children }) => {
-  const [cart, setCartItems] = useState({
-    items: [],
-    quantity: 0,
+  const [cart, setCartItems] = useState(() => {
+    const storedCart = localStorage.getItem("cart");
+    return storedCart ? JSON.parse(storedCart) : { items: [], quantity: 0 };
+  });
+
+  useEffect(() => {
+    localStorage.setItem("cart", JSON.stringify(cart));
+  }, [cart]);
+
+  const { mutate: syncCartFromBackend } = useMutation({
+    mutationFn: () => {},
+    onSuccess: (backendCart) => {
+      setCartItems(backendCart);
+      localStorage.setItem("cart", JSON.stringify(backendCart));
+    },
+    onError: (error) => {
+      console.log("Failed to sync cart from backend.", error);
+    },
   });
 
   function addToCart(item) {
@@ -115,6 +132,7 @@ const CartContextProvider = ({ children }) => {
     increaseItemQuantity,
     decreaseItemQuantity,
     clearCart,
+    syncCartFromBackend,
   };
 
   return (

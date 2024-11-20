@@ -13,7 +13,7 @@ import Auth from "./pages/Auth";
 import CartLayout from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import UserContextProvider from "./store/UserContextProvider";
-import { queryClient } from "./util/http";
+import { queryClient } from "./util/api";
 
 const routeDefinitions = createRoutesFromElements(
   <Route>

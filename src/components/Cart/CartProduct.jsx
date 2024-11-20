@@ -61,10 +61,8 @@ const CartProduct = ({ productData }) => {
             {product.title}
           </p>
           <p className="text-xs text-neutral-400 font-semibold">
-            {product && <span>{"White"}</span>} -{" "}
-            {product && <span>{"M"}</span>}
-            {/* {product.color && <span>{product.color[0]}</span>} -{" "}
-          {product.size && <span>{product.size[0]}</span>} */}
+            {product.fabric && <span>{product.fabric}</span>} -{" "}
+            {product.sizes.length >= 1 && <span>{product.sizes[2]}</span>}
           </p>
         </div>
       </div>
