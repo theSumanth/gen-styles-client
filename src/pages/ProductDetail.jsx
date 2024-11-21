@@ -13,7 +13,6 @@ const ProductDetail = () => {
   const queryKey = searchParams.get("productFromQueryKey");
 
   const { data: cachedProducts } = queryClient.getQueryData([queryKey]);
-
   const product = cachedProducts.find((p) => p._id === productId);
 
   const { _id, title, description, images } = product;
@@ -28,11 +27,13 @@ const ProductDetail = () => {
     setIndex((prev) => (prev <= 0 ? imagesLen - 1 : prev - 1));
   }
 
+  const layoutId = `product-image-${queryKey}-id-${_id}`;
+
   return (
     <div className="flex p-4 flex-col md:flex-row items-center md:items-start">
-      <aside className="md:h-full w-[95%] flex md:max-w-[45%] p-4 bg-white shadow-md rounded-md">
+      <aside className="md:h-full w-[95%] flex md:max-w-[35%] p-4 bg-white shadow-md rounded-md">
         <motion.div
-          layoutId={`product-image-${_id}`}
+          layoutId={layoutId}
           className="relative justify-center items-center w-[100%]"
         >
           <motion.img
@@ -55,9 +56,9 @@ const ProductDetail = () => {
           </CarouselButton>
         </motion.div>
       </aside>
-      <section className="flex flex-col w-[95%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
+      <section className="flex flex-col w-[95%] md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
         <div>
-          <h4 className="text-xl font-medium">{title}</h4>
+          <h4 className="text-lg font-medium">{title}</h4>
         </div>
         <div>
           <span className="text-xs text-neutral-500">{description}</span>

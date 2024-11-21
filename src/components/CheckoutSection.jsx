@@ -1,4 +1,4 @@
-import { useContext, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 
 import Button from "./UI/Button";
@@ -20,7 +20,16 @@ const CheckoutSection = () => {
   }, 0);
 
   const totalPrice = subTotalPrice - discountPrice;
-  console.log(isCouponValid);
+
+  useEffect(() => {
+    if (isCouponValid === undefined) return;
+    if (couponInputRef.current.value === "GENSTYLES20") {
+      setDiscountPrice(subTotalPrice * 0.2);
+      setIsCouponValid(true);
+    } else {
+      setIsCouponValid(false);
+    }
+  }, [subTotalPrice, isCouponValid]);
 
   function handleApplyCoupon() {
     if (couponInputRef.current.value === "GENSTYLES20") {

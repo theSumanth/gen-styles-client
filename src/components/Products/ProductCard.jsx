@@ -1,14 +1,17 @@
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 import CartButton from "../UI/CartButton";
+import Sizes from "./Sizes";
 
 const ProductCard = ({ productData, productFromQueryKey }) => {
-  const { _id, title, images, price } = productData;
+  const { _id, title, images, price, sizes } = productData;
 
   const cartButtonVariants = {
     idle: { y: 8, opacity: 0, pointerEvents: "none" },
     hovered: { y: 8, opacity: 1, pointerEvents: "auto" },
   };
+
+  const layoutId = `product-image-${productFromQueryKey}-id-${_id}`;
 
   return (
     <motion.li
@@ -18,17 +21,17 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
     >
       <div className="p-3">
         <motion.div>
-          <motion.div layoutId={`product-image-${_id}`}>
+          <motion.div layoutId={layoutId}>
             <img src={images[0]} alt="" className="rounded-md" />
           </motion.div>
           <div className="mt-2">
             <motion.div>
-              <h4 className="text-sm font-medium">{title}</h4>
+              <h5 className="text-xs font-semibold text-neutral-700">
+                {title}
+              </h5>
             </motion.div>
             <motion.div>
-              <span className="text-xs text-neutral-500">
-                {"Will add size here khotri"}
-              </span>
+              <Sizes sizes={sizes} />
             </motion.div>
             <div>
               <p className="text-neutral-600">

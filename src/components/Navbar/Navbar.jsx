@@ -44,6 +44,7 @@ function LogoutActionButton() {
     mutationFn: ({ authData, signal }) => logOutHttpFn({ authData, signal }),
     onSuccess: () => {
       userContext.clearUser();
+      localStorage.removeItem("user");
     },
   });
 

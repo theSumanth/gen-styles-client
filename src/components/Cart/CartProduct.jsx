@@ -38,13 +38,10 @@ const CartProduct = ({ productData }) => {
 
   return (
     <motion.li
-      layout
       variants={{
         hidden: { y: 70, opacity: 0 },
         visible: { y: 0, opacity: 1 },
-        exit: { x: -30, opacity: 0 },
       }}
-      exit={{ x: -30, opacity: 0 }}
       transition={{ duration: 0.3 }}
       className="flex flex-col not-mobile-view:flex-row relative justify-start not-mobile-view:justify-between gap-3 items-center border border-neutral-300 rounded-2xl mt-2 p-2"
     >
@@ -68,7 +65,7 @@ const CartProduct = ({ productData }) => {
       </div>
       <div className="w-full flex justify-between not-mobile-view:mr-6">
         <QuantityActions
-          productId={product.id}
+          productId={product._id}
           quantity={quantity}
           increaseQuantity={increaseItemQuantity}
           decreaseQuantity={decreaseItemQuantity}
@@ -83,7 +80,7 @@ const CartProduct = ({ productData }) => {
 
       {/* clear cart item */}
       <div className="absolute right-3 top-5 bg-white rounded-full text-red-500 cursor-pointer not-mobile-view:top-1/2 not-mobile-view:-translate-y-1/2">
-        <X onClick={() => deleteFromCart(product.id)} size={13} />
+        <X onClick={() => deleteFromCart(product._id)} size={13} />
       </div>
     </motion.li>
   );

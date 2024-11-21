@@ -8,10 +8,11 @@ import { selfReq } from "../util/authHttp";
 
 const RootLayout = () => {
   const userContext = useContext(UserContext);
+  const isUserLoggedInPreviously = JSON.parse(localStorage.getItem("user"));
 
   const { data } = useQuery({
     queryKey: ["auth-self"],
-    queryFn: selfReq,
+    queryFn: isUserLoggedInPreviously ? selfReq : null,
   });
 
   useEffect(() => {
