@@ -2,12 +2,16 @@ import { useContext, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { NavLink, useNavigate, useSearchParams } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
 
-import { UserContext } from "../store/UserContextProvider";
+import { toast } from "sonner";
+import { Eye, EyeClosed } from "lucide-react";
+
 import Input from "../components/UI/Input";
 import Button from "../components/UI/Button";
-import { Eye, EyeClosed } from "lucide-react";
 import { sigUp, logIn } from "../util/authHttp";
+import { CartContext } from "../store/CartContextProvider";
+import { UserContext } from "../store/UserContextProvider";
 
 const CustomPasswordInput = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -47,15 +51,29 @@ const Auth = () => {
   const [searchParams] = useSearchParams();
 
   const userContext = useContext(UserContext);
+  const cartContext = useContext(CartContext);
 
   const { mutate, status } = useMutation({
     mutationFn: ({ signal, authData }) => authHttpFn({ authData, signal }),
     onSuccess: (resData) => {
-      console.log("Sign In/Log In success");
+      toast.success(`${authHeading} successfull`);
+      console.log("Sign In/Log In success", resData);
+      localStorage.setItem("user", JSON.stringify(resData));
       userContext.storeUser(resData);
+      cartContext.syncCartFromBackend(resData);
       navigate("/");
     },
-    onError: (error) => console.log("Failed to login", error),
+    onError: (error) => {
+      if (axios.isAxiosError(error)) {
+        const toastMessages = error.response.data.errors.map(
+          (error) => error.msg
+        );
+        toastMessages.forEach((message) => {
+          toast.error(message);
+        });
+        console.log(toastMessages);
+      }
+    },
   });
 
   const handleSubmit = (e) => {

@@ -1,5 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
+import { toast } from "sonner";
+
+import { getUserCart } from "../util/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext({
@@ -23,7 +26,7 @@ const CartContextProvider = ({ children }) => {
   }, [cart]);
 
   const { mutate: syncCartFromBackend } = useMutation({
-    mutationFn: () => {},
+    mutationFn: getUserCart,
     onSuccess: (backendCart) => {
       setCartItems(backendCart);
       localStorage.setItem("cart", JSON.stringify(backendCart));
@@ -37,7 +40,7 @@ const CartContextProvider = ({ children }) => {
     setCartItems((prevCart) => {
       const newCartItems = [...prevCart.items];
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product.id === item.id
+        (i) => i.product._id === item._id
       );
 
       if (existingItemIndex === -1) {
@@ -53,6 +56,10 @@ const CartContextProvider = ({ children }) => {
         items: newCartItems,
         quantity: prevCart.quantity + 1,
       };
+
+      toast.success("Added to the cart!", {
+        description: item.title,
+      });
       return newCart;
     });
   }
@@ -60,10 +67,10 @@ const CartContextProvider = ({ children }) => {
   function deleteFromCart(itemId) {
     setCartItems((prevCart) => {
       const newCartItems = prevCart.items.filter(
-        (i) => i.product.id !== itemId
+        (i) => i.product._id !== itemId
       );
 
-      const removedItem = prevCart.items.find((i) => i.product.id === itemId);
+      const removedItem = prevCart.items.find((i) => i.product._id === itemId);
       const removedQuantity = removedItem ? removedItem.quantity : 0;
       const newCartQuantity = prevCart.quantity - removedQuantity;
 
@@ -77,7 +84,7 @@ const CartContextProvider = ({ children }) => {
       const newCartItems = [...prevCart.items];
 
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product.id === itemId
+        (i) => i.product._id === itemId
       );
       if (existingItemIndex === -1) return prevCart;
       const existingItem = newCartItems[existingItemIndex];
@@ -98,7 +105,7 @@ const CartContextProvider = ({ children }) => {
       const newCartItems = [...prevCart.items];
 
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product.id === itemId
+        (i) => i.product._id === itemId
       );
 
       if (existingItemIndex === -1) return prevCart;

@@ -5,6 +5,7 @@ import {
   RouterProvider,
 } from "react-router-dom";
 import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "sonner";
 
 import "./App.css";
 import RootLayout from "./pages/Root";
@@ -40,6 +41,7 @@ const router = createBrowserRouter(routeDefinitions, {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
+      <Toaster richColors position="bottom-right" visibleToasts={5} />
       <UserContextProvider>
         <RouterProvider
           future={{

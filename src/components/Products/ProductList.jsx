@@ -34,6 +34,8 @@ const ProductList = ({ listHeading }) => {
   const { data: fetchedData, isLoading } = useQuery({
     queryKey: [`products ${listHeading}`],
     queryFn: getProductsFn,
+    staleTime: 5 * 60 * 1000,
+    cacheTime: 30 * 60 * 1000,
   });
 
   if (isLoading) return <>Loading...</>;
