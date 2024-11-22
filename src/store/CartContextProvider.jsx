@@ -2,7 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { getUserCart } from "../util/http";
+import { getUserCart, storeUserCart } from "../util/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext({
@@ -26,13 +26,15 @@ const CartContextProvider = ({ children }) => {
   }, [cart]);
 
   const { mutate: syncCartFromBackend } = useMutation({
-    mutationFn: getUserCart,
+    mutationFn: ({ signal, userId, cartItems }) => {
+      //logic here
+    },
     onSuccess: (backendCart) => {
       setCartItems(backendCart);
       localStorage.setItem("cart", JSON.stringify(backendCart));
     },
     onError: (error) => {
-      console.log("Failed to sync cart from backend.", error);
+      console.log(error.code);
     },
   });
 

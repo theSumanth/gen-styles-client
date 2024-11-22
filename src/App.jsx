@@ -14,11 +14,22 @@ import Auth from "./pages/Auth";
 import CartLayout from "./pages/Cart";
 import ProductDetail from "./pages/ProductDetail";
 import UserContextProvider from "./store/UserContextProvider";
+import ErrorBoundary from "./pages/Error";
 import { queryClient } from "./util/api";
 
 const routeDefinitions = createRoutesFromElements(
   <Route>
-    <Route path="/" element={<RootLayout />}>
+    <Route
+      path="/"
+      element={<RootLayout />}
+      errorElement={
+        <ErrorBoundary
+          title={"Some Error has occured"}
+          message={"Please try again"}
+          className={"mt-32"}
+        />
+      }
+    >
       <Route index element={<HomePage />} />
       <Route path=":productId" element={<ProductDetail />} />
       <Route path="cart" element={<CartLayout />} />
@@ -41,7 +52,7 @@ const router = createBrowserRouter(routeDefinitions, {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster richColors position="bottom-right" visibleToasts={5} />
+      <Toaster richColors position="bottom-right" visibleToasts={3} />
       <UserContextProvider>
         <RouterProvider
           future={{

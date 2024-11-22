@@ -57,10 +57,9 @@ const Auth = () => {
     mutationFn: ({ signal, authData }) => authHttpFn({ authData, signal }),
     onSuccess: (resData) => {
       toast.success(`${authHeading} successfull`);
-      console.log("Sign In/Log In success", resData);
       localStorage.setItem("user", JSON.stringify(resData));
       userContext.storeUser(resData);
-      cartContext.syncCartFromBackend(resData);
+      cartContext.syncCartFromBackend({ userId: resData.id });
       navigate("/");
     },
     onError: (error) => {
@@ -118,6 +117,7 @@ const Auth = () => {
           <>
             <Input
               label="First Name"
+              placeholder="Eg. Jim"
               id="firstName"
               type="text"
               name="firstName"
@@ -125,6 +125,7 @@ const Auth = () => {
             />
             <Input
               label="Last Name"
+              placeholder="Eg. Halpert"
               id="lastName"
               type="text"
               name="lastName"
@@ -158,6 +159,7 @@ const Auth = () => {
 
         <Input
           label="Email"
+          placeholder="Eg. jimhalpert@hotmail.com"
           id="email"
           type="text"
           name="email"

@@ -1,23 +1,57 @@
 import { useState } from "react";
 import { useParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useQuery } from "@tanstack/react-query";
 
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import CarouselButton from "../components/UI/CarouselButton";
 import { queryClient } from "../util/api";
+import { getSingleProduct } from "../util/http";
+import ErrorBoundary from "./Error";
+import SkeletonProductDetail from "../components/Skeletons/SkeletonProductDetail";
 
 const ProductDetail = () => {
   const { productId } = useParams();
   const [searchParams] = useSearchParams();
   const queryKey = searchParams.get("productFromQueryKey");
 
-  const { data: cachedProducts } = queryClient.getQueryData([queryKey]);
-  const product = cachedProducts.find((p) => p._id === productId);
-
-  const { _id, title, description, images } = product;
-
   const [index, setIndex] = useState(0);
+
+  const cachedProducts = queryKey
+    ? queryClient.getQueryData([queryKey])
+    : undefined;
+  const cachedProduct = cachedProducts?.find((p) => p._id === productId);
+
+  console.log(cachedProduct);
+
+  const {
+    data: fetchedProduct,
+    isLoading,
+    isError,
+    error,
+  } = useQuery({
+    queryKey: ["product", productId],
+    queryFn: ({ signal }) => getSingleProduct({ signal, productId }),
+    initialData: cachedProduct,
+  });
+
+  if (isError) {
+    return (
+      <ErrorBoundary
+        title={"Failed to fetch the product"}
+        message={error.message}
+        className={"mt-32"}
+      />
+    );
+  }
+
+  if (isLoading) {
+    return <SkeletonProductDetail />;
+  }
+
+  const product = fetchedProduct || cachedProduct;
+  const { _id, title, description, images } = product;
 
   const imagesLen = images.length;
   function nextStep() {

@@ -12,12 +12,12 @@ const CartSection = () => {
 
   const cartIsEmpty = cart.items.length <= 0;
 
+  console.log(cart);
+
   const variants = {
     hidden: { y: 90, opacity: 0 },
     visible: { y: 0, opacity: 1 },
   };
-
-  console.log(cart);
 
   return (
     <motion.section
@@ -42,11 +42,7 @@ const CartSection = () => {
           }
         />
       </div>
-      <div className="hidden not-mobile-view:flex justify-between text-xs font-medium text-neutral-600">
-        <p>Product</p>
-        <p className="ml-20">Count</p>
-        <p className="mr-12">Price</p>
-      </div>
+
       {cartIsEmpty && (
         <motion.span
           animate={{
@@ -54,26 +50,35 @@ const CartSection = () => {
             opacity: [0, 1],
             transition: { duration: 0.5 },
           }}
-          className="flex justify-center p-2 mt-4 text-xs text-neutral-500 border border-neutral-300 rounded-xl"
+          className="flex justify-center py-8 mt-4 text-sm text-neutral-500 border border-neutral-300 rounded-xl"
         >
           Cart is Empty!
         </motion.span>
       )}
       <AnimatePresence>
         {!cartIsEmpty && (
-          <motion.ul
-            variants={{
-              visible: { transition: { staggerChildren: 0.12 } },
-            }}
-            exit={{ y: -30, opacity: 0 }}
-            className="flex flex-col gap-4 overflow-hidden"
-          >
-            <AnimatePresence>
-              {cart.items.map((cartItem) => {
-                return <CartProduct key={cartItem.id} productData={cartItem} />;
-              })}
-            </AnimatePresence>
-          </motion.ul>
+          <>
+            <div className="hidden not-mobile-view:flex justify-between text-xs font-medium text-neutral-600">
+              <p>Product</p>
+              <p className="ml-20">Count</p>
+              <p className="mr-12">Price</p>
+            </div>
+            <motion.ul
+              variants={{
+                visible: { transition: { staggerChildren: 0.12 } },
+              }}
+              exit={{ y: -30, opacity: 0 }}
+              className="flex flex-col gap-4 overflow-hidden"
+            >
+              <AnimatePresence>
+                {cart.items.map((cartItem) => {
+                  return (
+                    <CartProduct key={cartItem.id} productData={cartItem} />
+                  );
+                })}
+              </AnimatePresence>
+            </motion.ul>
+          </>
         )}
       </AnimatePresence>
     </motion.section>
