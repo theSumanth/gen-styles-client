@@ -23,8 +23,6 @@ const ProductDetail = () => {
     : undefined;
   const cachedProduct = cachedProducts?.find((p) => p._id === productId);
 
-  console.log(cachedProduct);
-
   const {
     data: fetchedProduct,
     isLoading,

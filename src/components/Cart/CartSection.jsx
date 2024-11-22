@@ -12,8 +12,6 @@ const CartSection = () => {
 
   const cartIsEmpty = cart.items.length <= 0;
 
-  console.log(cart);
-
   const variants = {
     hidden: { y: 90, opacity: 0 },
     visible: { y: 0, opacity: 1 },
@@ -73,7 +71,10 @@ const CartSection = () => {
               <AnimatePresence>
                 {cart.items.map((cartItem) => {
                   return (
-                    <CartProduct key={cartItem.id} productData={cartItem} />
+                    <CartProduct
+                      key={cartItem.product._id}
+                      productData={cartItem}
+                    />
                   );
                 })}
               </AnimatePresence>

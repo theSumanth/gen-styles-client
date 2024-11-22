@@ -1,5 +1,9 @@
 import { createContext, useState } from "react";
 import CartContextProvider from "./CartContextProvider";
+import {
+  removeUserFromLocalStorage,
+  setUserToLocalStorage,
+} from "../util/localStorage";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
@@ -13,11 +17,12 @@ const UserContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
 
   function storeUser(userObj) {
+    setUserToLocalStorage(userObj);
     setUserData(userObj);
   }
 
   function clearUser() {
-    console.log("clearing user");
+    removeUserFromLocalStorage();
     setUserData(null);
   }
 

@@ -52,7 +52,7 @@ export async function getUserCart({ userId, signal }) {
 
 export async function storeUserCart({ cartObj, signal }) {
   try {
-    const response = await axiosApi.get(`/api/cart/store-cart`, cartObj, {
+    const response = await axiosApi.post(`/api/cart/store-cart`, cartObj, {
       signal,
     });
     return response.data;
