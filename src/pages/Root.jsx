@@ -5,14 +5,16 @@ import { useQuery } from "@tanstack/react-query";
 import Navbar from "../components/Navbar";
 import { UserContext } from "../store/UserContextProvider";
 import { selfReq } from "../util/authHttp";
+import { getUserFromLocalStorage } from "../util/localStorage";
 
 const RootLayout = () => {
   const userContext = useContext(UserContext);
-  const isUserLoggedInPreviously = JSON.parse(localStorage.getItem("user"));
+  const isUserLoggedInPreviously = getUserFromLocalStorage();
 
   const { data } = useQuery({
     queryKey: ["auth-self"],
     queryFn: isUserLoggedInPreviously ? selfReq : null,
+    enabled: isUserLoggedInPreviously ? true : false,
   });
 
   useEffect(() => {

@@ -11,6 +11,8 @@ import CustomSquareButton from "../UI/CustomSquareButton";
 import { UserContext } from "../../store/UserContextProvider";
 import { LogOut } from "lucide-react";
 import { logOut as logOutHttpFn } from "../../util/authHttp";
+import { CartContext } from "../../store/CartContextProvider";
+import { queryClient } from "../../util/api";
 
 function AuthActionButtons() {
   return (
@@ -39,12 +41,15 @@ function AuthActionButtons() {
 
 function LogoutActionButton() {
   const userContext = useContext(UserContext);
+  const cartContext = useContext(CartContext);
 
   const { mutate } = useMutation({
     mutationFn: ({ authData, signal }) => logOutHttpFn({ authData, signal }),
     onSuccess: () => {
+      console.log("logged out");
       userContext.clearUser();
-      localStorage.removeItem("user");
+      cartContext.clearCart();
+      queryClient.resetQueries(["auth-self"]);
     },
   });
 

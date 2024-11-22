@@ -21,6 +21,7 @@ const CustomPasswordInput = () => {
       id="password"
       name="password"
       type={showPassword ? "text" : "password"}
+      autoComplete="current-password"
       inputCssClass={"!pr-8"}
     >
       <button
@@ -57,10 +58,8 @@ const Auth = () => {
     mutationFn: ({ signal, authData }) => authHttpFn({ authData, signal }),
     onSuccess: (resData) => {
       toast.success(`${authHeading} successfull`);
-      console.log("Sign In/Log In success", resData);
-      localStorage.setItem("user", JSON.stringify(resData));
       userContext.storeUser(resData);
-      cartContext.syncCartFromBackend(resData);
+      cartContext.syncCartFromBackend({ userId: resData.id });
       navigate("/");
     },
     onError: (error) => {
@@ -118,17 +117,21 @@ const Auth = () => {
           <>
             <Input
               label="First Name"
+              placeholder="Eg. Jim"
               id="firstName"
               type="text"
               name="firstName"
               title="firstName"
+              autoComplete="name"
             />
             <Input
               label="Last Name"
+              placeholder="Eg. Halpert"
               id="lastName"
               type="text"
               name="lastName"
               title="lastName"
+              autoComplete="family-name"
             />
             {/* <div className="flex gap-3 justify-start items-center w-full">
               <span className="text-xs font-semibold text-neutral-500">
@@ -158,10 +161,12 @@ const Auth = () => {
 
         <Input
           label="Email"
+          placeholder="Eg. jimhalpert@hotmail.com"
           id="email"
           type="text"
           name="email"
           title="email"
+          autoComplete="email"
         />
         <CustomPasswordInput />
 

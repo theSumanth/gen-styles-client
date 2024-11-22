@@ -1,12 +1,21 @@
 import { createContext, useEffect, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
-import { getUserCart } from "../util/http";
+import { toast } from "sonner";
+import debounce from "lodash.debounce";
+
+import { getUserCart, storeUserCart } from "../util/http";
+import {
+  getCartFromLocalStorage,
+  getUserFromLocalStorage,
+  removeCartFromLocalStorage,
+  setCartToLocalStorage,
+} from "../util/localStorage";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext({
   cart: [],
+  cartQueryState: {},
   addToCart: () => {},
   deleteFromCart: () => {},
   increaseItemQuantity: () => {},
@@ -17,24 +26,144 @@ export const CartContext = createContext({
 
 const CartContextProvider = ({ children }) => {
   const [cart, setCartItems] = useState(() => {
-    const storedCart = localStorage.getItem("cart");
-    return storedCart ? JSON.parse(storedCart) : { items: [], quantity: 0 };
+    const storedCart = getCartFromLocalStorage();
+    return storedCart ? storedCart : { items: [], quantity: 0 };
+  });
+
+  const userId = getUserFromLocalStorage().id;
+
+  const {
+    isLoading: isCartLoading,
+    isError: isCartError,
+    error: cartError,
+  } = useQuery({
+    queryKey: ["cart", userId],
+    queryFn: async () => {
+      if (!userId) throw new Error("User not authenticated");
+      const resData = await getUserCart({ userId });
+      return transformCartForClient(resData);
+    },
+    enabled: sessionStorage.getItem("tabRefreshed") === "true",
+    onSuccess: (data) => {
+      setCartItems(data);
+      sessionStorage.setItem("tabRefreshed", "false");
+    },
+    onError: (error) => {
+      console.error("Error fetching cart:", error);
+    },
   });
 
   useEffect(() => {
-    localStorage.setItem("cart", JSON.stringify(cart));
+    const existingCart = getCartFromLocalStorage();
+    if (JSON.stringify(existingCart) !== JSON.stringify(cart)) {
+      setCartToLocalStorage(cart);
+    }
+
+    if (!sessionStorage.getItem("tabRefreshed")) {
+      sessionStorage.setItem("tabRefreshed", "true");
+    }
   }, [cart]);
 
+  // useEffect(() => {
+  //   const syncCart = async () => {
+  //     if (userId) {
+  //       try {
+  //         console.log("fetch cart");
+  //         const resData = await getUserCart({ userId });
+  //         const fetchedCart = transformCartForClient(resData);
+  //         setCartItems(fetchedCart);
+  //       } catch (error) {
+  //         console.error("Error syncing cart:", error);
+  //       }
+  //     }
+  //   };
+
+  //   syncCart();
+  // }, [userId]);
+
   const { mutate: syncCartFromBackend } = useMutation({
-    mutationFn: getUserCart,
-    onSuccess: (backendCart) => {
-      setCartItems(backendCart);
-      localStorage.setItem("cart", JSON.stringify(backendCart));
+    mutationFn: async ({ signal, userId }) => {
+      const localCart = cart;
+      try {
+        const backendCart = await getUserCart({ signal, userId });
+        const transformedBackendCart = transformCartForClient(backendCart);
+        if (localCart.items.length <= 0) {
+          return transformedBackendCart;
+        }
+
+        const mergedCart = mergeCarts(localCart, transformedBackendCart);
+        const cartObj = transformCartForAPI(mergedCart, userId);
+        await storeUserCart({ signal, cartObj });
+        return mergedCart;
+      } catch (error) {
+        if (error.response?.status === 404) {
+          // First-time user, store local cart as backend cart
+          const cartObj = transformCartForAPI(localCart, userId);
+          await storeUserCart({ signal, cartObj });
+          return cart;
+        } else {
+          throw error;
+        }
+      }
+    },
+    onSuccess: (mergedCart) => {
+      setCartItems(mergedCart);
     },
     onError: (error) => {
-      console.log("Failed to sync cart from backend.", error);
+      console.log(error.code);
+      setCartItems(getCartFromLocalStorage);
     },
   });
+
+  function transformCartForAPI(cart, userId) {
+    return {
+      user_id: userId,
+      products: cart.items.map((item) => ({
+        product_id: item.product.product_id,
+        quantity: item.quantity,
+      })),
+    };
+  }
+
+  function transformCartForClient(cart) {
+    return {
+      items: cart.products,
+      quantity: cart.products.reduce((sum, item) => sum + item.quantity, 0),
+    };
+  }
+
+  const mergeCarts = (localCart, backendCart) => {
+    const productMap = new Map();
+
+    // Add backend cart items to the map
+    backendCart.items.forEach((item) => productMap.set(item.product._id, item));
+
+    // Merge with local cart items
+    localCart.items.forEach((item) => {
+      if (productMap.has(item.product._id)) {
+        productMap.get(item.product._id).quantity += item.quantity;
+      } else {
+        productMap.set(item.product._id, item);
+      }
+    });
+
+    const mergedItems = Array.from(productMap.values());
+    const totalQuantity = localCart.quantity + backendCart.quantity;
+
+    return { items: mergedItems, quantity: totalQuantity };
+  };
+
+  const updateCartOnBackend = debounce(async (updatedCart) => {
+    try {
+      const userId = getUserFromLocalStorage()?.id;
+      if (userId) {
+        const cartObj = transformCartForAPI(updatedCart, userId);
+        await storeUserCart({ cartObj });
+      }
+    } catch (error) {
+      console.error("Error updating cart on backend:", error);
+    }
+  }, 2500);
 
   function addToCart(item) {
     setCartItems((prevCart) => {
@@ -57,6 +186,7 @@ const CartContextProvider = ({ children }) => {
         quantity: prevCart.quantity + 1,
       };
 
+      updateCartOnBackend(newCart);
       toast.success("Added to the cart!", {
         description: item.title,
       });
@@ -75,6 +205,8 @@ const CartContextProvider = ({ children }) => {
       const newCartQuantity = prevCart.quantity - removedQuantity;
 
       const newCart = { items: newCartItems, quantity: newCartQuantity };
+
+      updateCartOnBackend(newCart);
       return newCart;
     });
   }
@@ -96,6 +228,8 @@ const CartContextProvider = ({ children }) => {
 
       const newCartQuantity = prevCart.quantity + 1;
       const newCart = { items: newCartItems, quantity: newCartQuantity };
+
+      updateCartOnBackend(newCart);
       return newCart;
     });
   }
@@ -121,19 +255,22 @@ const CartContextProvider = ({ children }) => {
       }
       const newCartQuantity = prevCart.quantity - 1;
       const newCart = { items: newCartItems, quantity: newCartQuantity };
+
+      updateCartOnBackend(newCart);
       return newCart;
     });
   }
 
   function clearCart() {
-    setCartItems({
-      items: [],
-      quantity: 0,
-    });
+    const emptyCart = { items: [], quantity: 0 };
+    removeCartFromLocalStorage();
+    setCartItems(emptyCart);
+    updateCartOnBackend(emptyCart);
   }
 
   const cartContext = {
     cart: cart,
+    cartQueryState: { isCartLoading, isCartError, cartError },
     addToCart,
     deleteFromCart,
     increaseItemQuantity,

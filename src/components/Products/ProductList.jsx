@@ -6,6 +6,7 @@ import {
   getTop20TrendProducts,
   getPersonalizedProducts,
 } from "../../util/http";
+import SkeletonProductCard from "../Skeletons/SkeletonProductCard";
 
 function SectionHeader({ listHeading }) {
   const LucideIcons = {
@@ -31,31 +32,31 @@ const ProductList = ({ listHeading }) => {
       ? getTop20TrendProducts
       : getPersonalizedProducts;
 
-  const { data: fetchedData, isLoading } = useQuery({
+  const { data: fetchedProducts, isFetching } = useQuery({
     queryKey: [`products ${listHeading}`],
     queryFn: getProductsFn,
     staleTime: 5 * 60 * 1000,
     cacheTime: 30 * 60 * 1000,
   });
 
-  if (isLoading) return <>Loading...</>;
-  const fetchedProducts = fetchedData.data;
-  console.log(listHeading, fetchedProducts);
+  // if (isLoading) return <>Loading...</>;
+  // const fetchedProducts = fetchedData?.data;
+  // console.log(listHeading, fetchedProducts);
 
   return (
     <div className="mb-3">
       <SectionHeader listHeading={listHeading} />
       <ul className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 place-items-center p-4 px-11 md:px-0">
-        {fetchedData &&
-          fetchedProducts.map((product) => {
-            return (
-              <ProductCard
-                key={product._id}
-                productData={product}
-                productFromQueryKey={`products ${listHeading}`}
-              />
-            );
-          })}
+        {isFetching && <SkeletonProductCard cardsCount={10} />}
+
+        {fetchedProducts &&
+          fetchedProducts.map((product) => (
+            <ProductCard
+              key={product._id}
+              productData={product}
+              productFromQueryKey={`products ${listHeading}`}
+            />
+          ))}
       </ul>
     </div>
   );
