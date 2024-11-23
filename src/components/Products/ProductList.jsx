@@ -1,11 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-
 import { Flame, Sparkles } from "lucide-react";
 import ProductCard from "./ProductCard";
-import {
-  getTop20TrendProducts,
-  getPersonalizedProducts,
-} from "../../util/http";
 import SkeletonProductCard from "../Skeletons/SkeletonProductCard";
 
 function SectionHeader({ listHeading }) {
@@ -26,23 +20,7 @@ function SectionHeader({ listHeading }) {
   );
 }
 
-const ProductList = ({ listHeading }) => {
-  const getProductsFn =
-    listHeading === "Trending Products"
-      ? getTop20TrendProducts
-      : getPersonalizedProducts;
-
-  const { data: fetchedProducts, isFetching } = useQuery({
-    queryKey: [`products ${listHeading}`],
-    queryFn: getProductsFn,
-    staleTime: 5 * 60 * 1000,
-    cacheTime: 30 * 60 * 1000,
-  });
-
-  // if (isLoading) return <>Loading...</>;
-  // const fetchedProducts = fetchedData?.data;
-  // console.log(listHeading, fetchedProducts);
-
+const ProductList = ({ listHeading, fetchedProducts, isFetching }) => {
   return (
     <div className="mb-3">
       <SectionHeader listHeading={listHeading} />
@@ -54,7 +32,7 @@ const ProductList = ({ listHeading }) => {
             <ProductCard
               key={product._id}
               productData={product}
-              productFromQueryKey={`products ${listHeading}`}
+              productFromQueryKey={listHeading}
             />
           ))}
       </ul>
