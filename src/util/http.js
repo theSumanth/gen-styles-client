@@ -26,11 +26,23 @@ export async function getPersonalizedProducts({ signal }) {
   }
 }
 
+export async function getSimilarProducts({ signal, pid }) {
+  try {
+    const response = await axiosApi.get(
+      `/api/openai/get-products/similar?productId=${pid}`,
+      { signal }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
 export async function getSingleProduct({ signal, productId, pid }) {
   const user = getUserFromLocalStorage();
   let url = `/api/catalogue/get-product?_id=${productId}`;
   if (user) {
-    url = `&userId=${user.id}&productId=${pid}`;
+    url += `&userId=${user.id}&productId=${pid}`;
   }
   try {
     const response = await axiosApi.get(url, {
