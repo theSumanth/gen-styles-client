@@ -59,7 +59,7 @@ const CartProduct = ({ productData }) => {
           </p>
           <p className="text-xs text-neutral-400 font-semibold">
             {product.fabric && <span>{product.fabric}</span>} -{" "}
-            {product.sizes.length >= 1 && <span>{product.sizes[2]}</span>}
+            {product.sizes.length >= 1 && <span>{product.sizes[0]}</span>}
           </p>
         </div>
       </div>
