@@ -2,6 +2,7 @@ import { useContext } from "react";
 import { motion } from "framer-motion";
 
 import { ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 
 import { CartContext } from "../../store/CartContextProvider";
 import CustomSquareButton from "./CustomSquareButton";
@@ -20,14 +21,21 @@ const CartButton = ({
     cart: { quantity },
   } = cartContext;
 
+  function handleAddToCart() {
+    if (!props.selectedSize) {
+      toast.warning("Please select a size!");
+    } else {
+      productData.sizes = [props.selectedSize];
+      addToCart(productData);
+    }
+  }
+
   const { onClick: propsOnClick, ...restProps } = props;
   return (
     <CustomSquareButton
       label={label}
       onClick={
-        showCartQuantity && propsOnClick
-          ? propsOnClick
-          : () => addToCart(productData)
+        showCartQuantity && propsOnClick ? propsOnClick : handleAddToCart
       }
       LucideIcon={ShoppingBag}
       className={className}

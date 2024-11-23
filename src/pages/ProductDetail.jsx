@@ -66,13 +66,13 @@ const ProductDetail = () => {
       <aside className="md:h-full w-[95%] flex md:max-w-[35%] p-4 bg-white shadow-md rounded-md">
         <motion.div
           layoutId={layoutId}
-          className="relative justify-center items-center w-[100%]"
+          className="relative justify-center items-center w-full"
         >
           <motion.img
             src={images[index]}
             alt="product images"
             key={images[index]}
-            className="rounded-md object-cover"
+            className="rounded-md object-cover w-full"
           />
           <CarouselButton
             onClick={prevStep}
