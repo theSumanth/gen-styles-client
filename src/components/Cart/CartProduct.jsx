@@ -7,20 +7,21 @@ import { CartContext } from "../../store/CartContextProvider";
 function QuantityActions({
   productId,
   quantity,
+  size,
   increaseQuantity,
   decreaseQuantity,
 }) {
   return (
     <div className="flex gap-2 items-center">
       <CircleMinus
-        onClick={quantity > 1 ? () => decreaseQuantity(productId) : null}
+        onClick={quantity > 1 ? () => decreaseQuantity(productId, size) : null}
         strokeWidth={1.2}
         size={18}
         className="text-neutral-600 hover:text-customBlue cursor-pointer"
       />
       <p className="text-sm">{quantity}</p>
       <CirclePlus
-        onClick={() => increaseQuantity(productId)}
+        onClick={() => increaseQuantity(productId, size)}
         strokeWidth={1.2}
         size={18}
         className="text-neutral-600 hover:text-customBlue cursor-pointer"
@@ -29,12 +30,14 @@ function QuantityActions({
   );
 }
 
-const CartProduct = ({ productData }) => {
+const CartProduct = ({ itemData }) => {
   const cartContext = useContext(CartContext);
   const { deleteFromCart, increaseItemQuantity, decreaseItemQuantity } =
     cartContext;
 
-  const { product, quantity } = productData;
+  const { product, quantity, size: selectedSize } = itemData;
+
+  // console.log(itemData);
 
   return (
     <motion.li
@@ -59,13 +62,14 @@ const CartProduct = ({ productData }) => {
           </p>
           <p className="text-xs text-neutral-400 font-semibold">
             {product.fabric && <span>{product.fabric}</span>} -{" "}
-            {product.sizes.length >= 1 && <span>{product.sizes[0]}</span>}
+            {product.sizes.length >= 1 && <span>{selectedSize}</span>}
           </p>
         </div>
       </div>
       <div className="w-full flex justify-between not-mobile-view:mr-6">
         <QuantityActions
           productId={product._id}
+          size={selectedSize}
           quantity={quantity}
           increaseQuantity={increaseItemQuantity}
           decreaseQuantity={decreaseItemQuantity}
@@ -80,7 +84,10 @@ const CartProduct = ({ productData }) => {
 
       {/* clear cart item */}
       <div className="absolute right-3 top-5 bg-white rounded-full text-red-500 cursor-pointer not-mobile-view:top-1/2 not-mobile-view:-translate-y-1/2">
-        <X onClick={() => deleteFromCart(product._id)} size={13} />
+        <X
+          onClick={() => deleteFromCart(product._id, selectedSize)}
+          size={13}
+        />
       </div>
     </motion.li>
   );

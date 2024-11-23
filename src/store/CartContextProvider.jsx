@@ -1,5 +1,5 @@
-import { createContext, useEffect, useState } from "react";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { createContext, useContext, useEffect, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
 
 import { toast } from "sonner";
 import debounce from "lodash.debounce";
@@ -11,6 +11,7 @@ import {
   removeCartFromLocalStorage,
   setCartToLocalStorage,
 } from "../util/localStorage";
+import { UserContext } from "./UserContextProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const CartContext = createContext({
@@ -31,55 +32,33 @@ const CartContextProvider = ({ children }) => {
   });
 
   const userId = getUserFromLocalStorage().id;
-
-  const {
-    isLoading: isCartLoading,
-    isError: isCartError,
-    error: cartError,
-  } = useQuery({
-    queryKey: ["cart", userId],
-    queryFn: async () => {
-      if (!userId) throw new Error("User not authenticated");
-      const resData = await getUserCart({ userId });
-      return transformCartForClient(resData);
-    },
-    enabled: sessionStorage.getItem("tabRefreshed") === "true",
-    onSuccess: (data) => {
-      setCartItems(data);
-      sessionStorage.setItem("tabRefreshed", "false");
-    },
-    onError: (error) => {
-      console.error("Error fetching cart:", error);
-    },
-  });
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     const existingCart = getCartFromLocalStorage();
     if (JSON.stringify(existingCart) !== JSON.stringify(cart)) {
       setCartToLocalStorage(cart);
     }
-
-    if (!sessionStorage.getItem("tabRefreshed")) {
-      sessionStorage.setItem("tabRefreshed", "true");
-    }
   }, [cart]);
 
-  // useEffect(() => {
-  //   const syncCart = async () => {
-  //     if (userId) {
-  //       try {
-  //         console.log("fetch cart");
-  //         const resData = await getUserCart({ userId });
-  //         const fetchedCart = transformCartForClient(resData);
-  //         setCartItems(fetchedCart);
-  //       } catch (error) {
-  //         console.error("Error syncing cart:", error);
-  //       }
-  //     }
-  //   };
+  useEffect(() => {
+    const syncCart = async () => {
+      if (userId) {
+        try {
+          console.log("fetch cart");
+          const resData = await getUserCart({ userId });
+          const fetchedCart = transformCartForClient(resData);
+          setCartItems(fetchedCart);
+        } catch (error) {
+          console.error("Error syncing cart:", error);
+        }
+      }
+    };
 
-  //   syncCart();
-  // }, [userId]);
+    if (userId && user) {
+      syncCart();
+    }
+  }, [userId, user]);
 
   const { mutate: syncCartFromBackend } = useMutation({
     mutationFn: async ({ signal, userId }) => {
@@ -120,6 +99,7 @@ const CartContextProvider = ({ children }) => {
       user_id: userId,
       products: cart.items.map((item) => ({
         product_id: item.product.product_id,
+        size: item.size,
         quantity: item.quantity,
       })),
     };
@@ -135,20 +115,25 @@ const CartContextProvider = ({ children }) => {
   const mergeCarts = (localCart, backendCart) => {
     const productMap = new Map();
 
-    // Add backend cart items to the map
-    backendCart.items.forEach((item) => productMap.set(item.product._id, item));
+    backendCart.items.forEach((item) => {
+      const key = `${item.product._id}-${item.size}`;
+      productMap.set(key, item);
+    });
 
-    // Merge with local cart items
     localCart.items.forEach((item) => {
-      if (productMap.has(item.product._id)) {
-        productMap.get(item.product._id).quantity += item.quantity;
+      const key = `${item.product._id}-${item.size}`;
+      if (productMap.has(key)) {
+        productMap.get(key).quantity += item.quantity;
       } else {
-        productMap.set(item.product._id, item);
+        productMap.set(key, item);
       }
     });
 
     const mergedItems = Array.from(productMap.values());
-    const totalQuantity = localCart.quantity + backendCart.quantity;
+    const totalQuantity = mergedItems.reduce(
+      (sum, item) => sum + item.quantity,
+      0
+    );
 
     return { items: mergedItems, quantity: totalQuantity };
   };
@@ -166,14 +151,16 @@ const CartContextProvider = ({ children }) => {
   }, 2500);
 
   function addToCart(item) {
+    const { product, size } = item;
+
     setCartItems((prevCart) => {
       const newCartItems = [...prevCart.items];
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product._id === item._id
+        (i) => i.product._id === product._id && i.size === size
       );
 
       if (existingItemIndex === -1) {
-        newCartItems.push({ product: item, quantity: 1 });
+        newCartItems.push({ product, size, quantity: 1 });
       } else {
         newCartItems[existingItemIndex] = {
           ...newCartItems[existingItemIndex],
@@ -188,19 +175,21 @@ const CartContextProvider = ({ children }) => {
 
       updateCartOnBackend(newCart);
       toast.success("Added to the cart!", {
-        description: item.title,
+        description: `${product.title} (${size})`,
       });
       return newCart;
     });
   }
 
-  function deleteFromCart(itemId) {
+  function deleteFromCart(productId, size) {
     setCartItems((prevCart) => {
       const newCartItems = prevCart.items.filter(
-        (i) => i.product._id !== itemId
+        (i) => i.product._id !== productId || i.size !== size
       );
 
-      const removedItem = prevCart.items.find((i) => i.product._id === itemId);
+      const removedItem = prevCart.items.find(
+        (i) => i.product._id === productId && i.size === size
+      );
       const removedQuantity = removedItem ? removedItem.quantity : 0;
       const newCartQuantity = prevCart.quantity - removedQuantity;
 
@@ -211,40 +200,40 @@ const CartContextProvider = ({ children }) => {
     });
   }
 
-  function increaseItemQuantity(itemId) {
+  function increaseItemQuantity(productId, size) {
     setCartItems((prevCart) => {
       const newCartItems = [...prevCart.items];
-
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product._id === itemId
+        (i) => i.product._id === productId && i.size === size
       );
+
       if (existingItemIndex === -1) return prevCart;
-      const existingItem = newCartItems[existingItemIndex];
 
       newCartItems[existingItemIndex] = {
-        ...existingItem,
-        quantity: existingItem.quantity + 1,
+        ...newCartItems[existingItemIndex],
+        quantity: newCartItems[existingItemIndex].quantity + 1,
       };
 
-      const newCartQuantity = prevCart.quantity + 1;
-      const newCart = { items: newCartItems, quantity: newCartQuantity };
+      const newCart = {
+        items: newCartItems,
+        quantity: prevCart.quantity + 1,
+      };
 
       updateCartOnBackend(newCart);
       return newCart;
     });
   }
 
-  function decreaseItemQuantity(itemId) {
+  function decreaseItemQuantity(productId, size) {
     setCartItems((prevCart) => {
       const newCartItems = [...prevCart.items];
-
       const existingItemIndex = newCartItems.findIndex(
-        (i) => i.product._id === itemId
+        (i) => i.product._id === productId && i.size === size
       );
 
       if (existingItemIndex === -1) return prevCart;
-      const existingItem = newCartItems[existingItemIndex];
 
+      const existingItem = newCartItems[existingItemIndex];
       if (existingItem.quantity <= 1) {
         newCartItems.splice(existingItemIndex, 1);
       } else {
@@ -253,8 +242,11 @@ const CartContextProvider = ({ children }) => {
           quantity: existingItem.quantity - 1,
         };
       }
-      const newCartQuantity = prevCart.quantity - 1;
-      const newCart = { items: newCartItems, quantity: newCartQuantity };
+
+      const newCart = {
+        items: newCartItems,
+        quantity: prevCart.quantity - 1,
+      };
 
       updateCartOnBackend(newCart);
       return newCart;
@@ -270,7 +262,7 @@ const CartContextProvider = ({ children }) => {
 
   const cartContext = {
     cart: cart,
-    cartQueryState: { isCartLoading, isCartError, cartError },
+    // cartQueryState: { isCartLoading, isCartError, cartError },
     addToCart,
     deleteFromCart,
     increaseItemQuantity,

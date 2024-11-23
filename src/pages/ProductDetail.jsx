@@ -30,8 +30,10 @@ const ProductDetail = () => {
     error,
   } = useQuery({
     queryKey: ["product", productId],
-    queryFn: ({ signal }) => getSingleProduct({ signal, productId }),
+    queryFn: ({ signal }) =>
+      getSingleProduct({ signal, productId, pid: cachedProduct.product_id }),
     initialData: cachedProduct,
+    staleTime: 1000 * 60 * 5,
   });
 
   if (isError) {

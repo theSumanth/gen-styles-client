@@ -1,9 +1,13 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+
 import CartContextProvider from "./CartContextProvider";
 import {
+  getUserFromLocalStorage,
   removeUserFromLocalStorage,
   setUserToLocalStorage,
 } from "../util/localStorage";
+import { selfReq } from "../util/authHttp";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
@@ -15,6 +19,20 @@ export const UserContext = createContext({
 
 const UserContextProvider = ({ children }) => {
   const [userData, setUserData] = useState(null);
+
+  const isUserLoggedInPreviously = getUserFromLocalStorage();
+
+  const { data } = useQuery({
+    queryKey: ["auth-self"],
+    queryFn: isUserLoggedInPreviously ? selfReq : null,
+    enabled: isUserLoggedInPreviously ? true : false,
+  });
+
+  useEffect(() => {
+    if (data) {
+      storeUser(data);
+    }
+  }, [data]);
 
   function storeUser(userObj) {
     setUserToLocalStorage(userObj);

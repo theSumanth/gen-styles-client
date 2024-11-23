@@ -1,13 +1,13 @@
 const Sizes = ({ sizes, selectedSize, setSelectedSize }) => {
   function toggleSelectSize(size) {
-    setSelectedSize((prevSize) => (prevSize ? undefined : size));
+    setSelectedSize((prevSize) => (prevSize === size ? undefined : size));
   }
 
   return (
     <ul className="flex text-xs text-neutral-400 gap-1 my-1">
-      {sizes.map((size) => (
+      {sizes.map((size, index) => (
         <li
-          key={Math.random()}
+          key={index}
           onClick={() => toggleSelectSize(size)}
           className={`px-1 rounded border hover:text-customBlue hover:scale-105 hover:border-customBlue transition-all cursor-pointer ${
             selectedSize === size

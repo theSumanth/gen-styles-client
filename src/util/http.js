@@ -1,4 +1,5 @@
 import { axiosApi, handleError } from "./api";
+import { getUserFromLocalStorage } from "./localStorage";
 
 axiosApi.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -25,14 +26,16 @@ export async function getPersonalizedProducts({ signal }) {
   }
 }
 
-export async function getSingleProduct({ signal, productId }) {
+export async function getSingleProduct({ signal, productId, pid }) {
+  const user = getUserFromLocalStorage();
+  let url = `/api/catalogue/get-product?_id=${productId}`;
+  if (user) {
+    url = `&userId=${user.id}&productId=${pid}`;
+  }
   try {
-    const response = await axiosApi.get(
-      `/api/catalogue/get-product?_id=${productId}`,
-      {
-        signal,
-      }
-    );
+    const response = await axiosApi.get(url, {
+      signal,
+    });
     return response.data;
   } catch (error) {
     handleError(error);
