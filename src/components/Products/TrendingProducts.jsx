@@ -6,7 +6,7 @@ import { getTop20TrendProducts } from "../../util/http";
 
 const TrendingProducts = () => {
   const { data: fetchedProducts, isFetching } = useQuery({
-    queryKey: ["Trending products"],
+    queryKey: ["Trending Products"],
     queryFn: getTop20TrendProducts,
     staleTime: 5 * 60 * 1000,
     cacheTime: 30 * 60 * 1000,

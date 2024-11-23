@@ -7,9 +7,7 @@ import { useState } from "react";
 const ProductCard = ({ productData, productFromQueryKey }) => {
   const [selectedSize, setSelectedSize] = useState(undefined);
 
-  // console.log(selectedSize);
-
-  const { _id, title, images, price, sizes } = productData;
+  const { _id, product_id, title, images, price, sizes } = productData;
 
   const cartButtonVariants = {
     idle: { y: 8, opacity: 0, pointerEvents: "none" },
@@ -20,13 +18,13 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
 
   return (
     <motion.li
-      className="relative bg-white rounded-md shadow w-[14rem] h-[22.5rem] m-2 hover:shadow-md transition-all"
+      className="relative bg-white rounded-md shadow w-[14rem] h-[23rem] m-2 hover:shadow-md transition-all"
       whileHover="hovered"
       initial="idle"
     >
       <div className="p-3">
         <NavLink
-          to={`/${_id}?productFromQueryKey=${productFromQueryKey}`}
+          to={`/${_id}?productFromQueryKey=${productFromQueryKey}&product_id=${product_id}`}
           className="block"
         >
           <motion.div>
@@ -62,7 +60,7 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
           selectedSize={selectedSize}
           key={productData.id}
           productData={productData}
-          className="absolute flex shadow left-1/2 -translate-x-1/2 bottom-28 z-10 hover:bg-green-400 transition-all duration-300 "
+          className="absolute flex shadow left-1/2 -translate-x-1/2 bottom-32 z-10 hover:bg-green-400 transition-all duration-300 "
         />
       </motion.div>
     </motion.li>
