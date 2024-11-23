@@ -72,8 +72,8 @@ const CartSection = () => {
                 {cart.items.map((cartItem) => {
                   return (
                     <CartProduct
-                      key={cartItem.product._id}
-                      productData={cartItem}
+                      key={`${cartItem.product._id}-${cartItem.size}`}
+                      itemData={cartItem}
                     />
                   );
                 })}

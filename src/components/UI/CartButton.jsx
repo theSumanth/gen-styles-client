@@ -12,6 +12,7 @@ const CartButton = ({
   productData,
   className,
   showCartQuantity,
+  selectedSize,
   ...props
 }) => {
   const cartContext = useContext(CartContext);
@@ -22,12 +23,13 @@ const CartButton = ({
   } = cartContext;
 
   function handleAddToCart() {
-    if (!props.selectedSize) {
-      toast.warning("Please select a size!");
-    } else {
-      productData.sizes = [props.selectedSize];
-      addToCart(productData);
+    if (!selectedSize) {
+      toast.error("Please select a size!");
+      return;
     }
+
+    const productWithSize = { product: productData, size: selectedSize };
+    addToCart(productWithSize);
   }
 
   const { onClick: propsOnClick, ...restProps } = props;

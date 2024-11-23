@@ -1,31 +1,19 @@
-import { useContext, useEffect } from "react";
+import { useContext } from "react";
 import { Outlet } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
 
 import Navbar from "../components/Navbar";
 import { UserContext } from "../store/UserContextProvider";
-import { selfReq } from "../util/authHttp";
 import { getUserFromLocalStorage } from "../util/localStorage";
 
 const RootLayout = () => {
-  const userContext = useContext(UserContext);
-  const isUserLoggedInPreviously = getUserFromLocalStorage();
+  const { isAuthenticated } = useContext(UserContext);
+  const userId = getUserFromLocalStorage().id;
 
-  const { data } = useQuery({
-    queryKey: ["auth-self"],
-    queryFn: isUserLoggedInPreviously ? selfReq : null,
-    enabled: isUserLoggedInPreviously ? true : false,
-  });
-
-  useEffect(() => {
-    if (data) {
-      userContext.storeUser(data);
-    }
-  }, [data, userContext]);
+  console.log(isAuthenticated);
 
   return (
     <div className="bg-customBackground min-h-screen flex flex-col">
-      <Navbar isAuthenticated={userContext.isAuthenticated} />
+      <Navbar isAuthenticated={isAuthenticated && userId} />
       <div className="mt-[4.5rem] flex-grow">
         <Outlet />
       </div>

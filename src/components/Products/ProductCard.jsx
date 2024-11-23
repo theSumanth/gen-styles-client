@@ -7,6 +7,8 @@ import { useState } from "react";
 const ProductCard = ({ productData, productFromQueryKey }) => {
   const [selectedSize, setSelectedSize] = useState(undefined);
 
+  // console.log(selectedSize);
+
   const { _id, title, images, price, sizes } = productData;
 
   const cartButtonVariants = {
@@ -38,13 +40,13 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
           <motion.div>
             <h5 className="text-xs font-semibold text-neutral-700">{title}</h5>
           </motion.div>
-          <motion.div>
+          <div>
             <Sizes
               sizes={sizes}
               selectedSize={selectedSize}
               setSelectedSize={setSelectedSize}
             />
-          </motion.div>
+          </div>
           <div>
             <p className="text-neutral-600">
               Rs. <span className="font-medium text-neutral-700">{price}</span>
