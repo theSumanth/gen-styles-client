@@ -4,7 +4,7 @@ import CartButton from "../UI/CartButton";
 import Sizes from "./Sizes";
 import { useState } from "react";
 
-const ProductCard = ({ productData, productFromQueryKey }) => {
+const ProductCard = ({ productData }) => {
   const [selectedSize, setSelectedSize] = useState(undefined);
 
   const { _id, product_id, title, images, price, sizes } = productData;
@@ -14,8 +14,6 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
     hovered: { y: 8, opacity: 1, pointerEvents: "auto" },
   };
 
-  const layoutId = `product-image-${productFromQueryKey}-id-${_id}`;
-
   return (
     <motion.li
       className="relative bg-white rounded-md shadow w-[14rem] h-[23rem] m-2 hover:shadow-md transition-all"
@@ -23,21 +21,18 @@ const ProductCard = ({ productData, productFromQueryKey }) => {
       initial="idle"
     >
       <div className="p-3">
-        <NavLink
-          to={`/${_id}?productFromQueryKey=${productFromQueryKey}&product_id=${product_id}`}
-          className="block"
-        >
-          <motion.div>
-            <motion.div layoutId={layoutId} className="h-full">
+        <NavLink to={`/${_id}?product_id=${product_id}`} className="block">
+          <div>
+            <div className="h-full">
               <img src={images[0]} alt="" className="rounded-md" />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </NavLink>
 
         <div className="mt-2">
-          <motion.div>
+          <div>
             <h5 className="text-xs font-semibold text-neutral-700">{title}</h5>
-          </motion.div>
+          </div>
           <div>
             <Sizes
               sizes={sizes}

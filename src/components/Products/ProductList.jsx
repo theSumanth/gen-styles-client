@@ -29,11 +29,7 @@ const ProductList = ({ listHeading, fetchedProducts, isFetching }) => {
 
         {fetchedProducts &&
           fetchedProducts.map((product) => (
-            <ProductCard
-              key={product._id}
-              productData={product}
-              productFromQueryKey={listHeading}
-            />
+            <ProductCard key={product._id} productData={product} />
           ))}
       </ul>
     </div>

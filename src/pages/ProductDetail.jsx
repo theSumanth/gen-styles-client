@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { ChevronsLeft, ChevronsRight } from "lucide-react";
 
 import CarouselButton from "../components/UI/CarouselButton";
-import { queryClient } from "../util/api";
 import { getSimilarProducts, getSingleProduct } from "../util/http";
 import ErrorBoundary from "./Error";
 import SkeletonProductDetail from "../components/Skeletons/SkeletonProductDetail";
@@ -18,16 +17,10 @@ const ProductDetail = () => {
   window.scrollTo(0, 0);
   const { productId } = useParams();
   const [searchParams] = useSearchParams();
-  const queryKey = searchParams.get("productFromQueryKey");
   const product_id = searchParams.get("product_id");
 
   const [selectedSize, setSelectedSize] = useState(undefined);
   const [index, setIndex] = useState(0);
-
-  const cachedProducts = queryKey
-    ? queryClient.getQueryData([queryKey])
-    : undefined;
-  const cachedProduct = cachedProducts?.find((p) => p._id === productId);
 
   const {
     data: fetchedProduct,
@@ -38,13 +31,11 @@ const ProductDetail = () => {
     queryKey: ["product", productId],
     queryFn: ({ signal }) =>
       getSingleProduct({ signal, productId, pid: product_id }),
-    initialData: queryKey ? cachedProduct : null,
   });
 
   const { data: fetchedSimilarProducts, isFetchingSimilar } = useQuery({
     queryKey: ["Similar Products"],
     queryFn: ({ signal }) => getSimilarProducts({ signal, pid: product_id }),
-    // cacheTime: 30 * 60 * 1000,
   });
 
   if (isError) {
@@ -61,7 +52,7 @@ const ProductDetail = () => {
     return <SkeletonProductDetail />;
   }
 
-  const product = fetchedProduct || cachedProduct;
+  const product = fetchedProduct;
   const { _id, title, description, price, images, sizes, fabric, style } =
     product;
 
@@ -73,37 +64,46 @@ const ProductDetail = () => {
     setIndex((prev) => (prev <= 0 ? imagesLen - 1 : prev - 1));
   }
 
-  const layoutId = `product-image-${queryKey}-id-${_id}`;
-
   return (
     <>
       <div className="flex p-4 flex-col md:flex-row items-center md:items-start">
-        <aside className="md:h-full w-[95%] flex md:max-w-[35%] p-4 bg-white shadow-md rounded-md">
-          <motion.div
-            layoutId={layoutId}
-            className="relative justify-center items-center w-full"
+        <aside className="w-[95%] bg-white flex md:max-w-[40%] p-4 shadow-md rounded-md items-center justify-center">
+          <div
+            className="relative flex justify-center items-center h-auto w-full max-w-[400px] max-h-[500px]"
+            style={{ minHeight: "350px" }}
           >
-            <motion.img
-              src={images[index]}
-              alt="product images"
-              key={images[index]}
-              className="rounded-md object-cover w-full"
-            />
+            {images[index] ? (
+              <img
+                src={images[index]}
+                alt="product images"
+                className="rounded-md w-full h-auto max-w-[400px] max-h-[500px] object-contain"
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-md">
+                <span className="text-gray-500">Loading...</span>
+              </div>
+            )}
+
             <CarouselButton
               onClick={prevStep}
-              className={"left-0 top-1/2 -translate-y-1/2"}
+              className={
+                "left-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
+              }
             >
               <ChevronsLeft />
             </CarouselButton>
             <CarouselButton
               onClick={nextStep}
-              className={"right-0 top-1/2 -translate-y-1/2"}
+              className={
+                "right-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
+              }
             >
               <ChevronsRight />
             </CarouselButton>
-          </motion.div>
+          </div>
         </aside>
-        <section className="flex flex-col gap-2 w-[95%] md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
+
+        <section className="flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
           <h4 className="text-lg font-medium">{title}</h4>
           <div className="flex flex-col">
             <p className="flex gap-2">
