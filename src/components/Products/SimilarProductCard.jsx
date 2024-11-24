@@ -1,10 +1,8 @@
 import { motion } from "framer-motion";
 import { NavLink } from "react-router-dom";
 
-const SimilarProductCard = ({ productData, productFromQueryKey }) => {
+const SimilarProductCard = ({ productData }) => {
   const { _id, product_id, title, images, price } = productData;
-
-  const layoutId = `product-image-${productFromQueryKey}-id-${_id}`;
 
   return (
     <motion.li
@@ -13,21 +11,18 @@ const SimilarProductCard = ({ productData, productFromQueryKey }) => {
       initial="idle"
     >
       <div className="p-3">
-        <NavLink
-          to={`/${_id}?productFromQueryKey=${productFromQueryKey}&product_id=${product_id}`}
-          className="block"
-        >
-          <motion.div>
-            <motion.div layoutId={layoutId} className="h-full">
+        <NavLink to={`/${_id}?product_id=${product_id}`} className="block">
+          <div>
+            <div className="h-full">
               <img src={images[0]} alt="" className="rounded-md" />
-            </motion.div>
-          </motion.div>
+            </div>
+          </div>
         </NavLink>
 
         <div className="mt-2">
-          <motion.div>
+          <div>
             <h5 className="text-xs font-semibold text-neutral-700">{title}</h5>
-          </motion.div>
+          </div>
           <div>
             <p className="text-neutral-600">
               Rs. <span className="font-medium text-neutral-700">{price}</span>

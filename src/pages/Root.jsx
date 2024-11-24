@@ -9,8 +9,6 @@ const RootLayout = () => {
   const { isAuthenticated } = useContext(UserContext);
   const userId = getUserFromLocalStorage().id;
 
-  console.log(isAuthenticated);
-
   return (
     <div className="bg-customBackground min-h-screen flex flex-col">
       <Navbar isAuthenticated={isAuthenticated && userId} />

@@ -1,6 +1,8 @@
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
+import { SkeletonTheme } from "react-loading-skeleton";
+
 import CartContextProvider from "./CartContextProvider";
 import {
   getUserFromLocalStorage,
@@ -53,7 +55,9 @@ const UserContextProvider = ({ children }) => {
 
   return (
     <UserContext.Provider value={userContext}>
-      <CartContextProvider>{children}</CartContextProvider>
+      <SkeletonTheme baseColor="#D5D3E5" highlightColor="#F1F0F6">
+        <CartContextProvider>{children}</CartContextProvider>
+      </SkeletonTheme>
     </UserContext.Provider>
   );
 };
