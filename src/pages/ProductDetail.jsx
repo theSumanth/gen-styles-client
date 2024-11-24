@@ -28,14 +28,16 @@ const ProductDetail = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["product", productId],
+    queryKey: ["product", productId, product_id],
     queryFn: ({ signal }) =>
       getSingleProduct({ signal, productId, pid: product_id }),
+    staleTime: 0,
   });
 
   const { data: fetchedSimilarProducts, isFetchingSimilar } = useQuery({
-    queryKey: ["Similar Products"],
+    queryKey: ["Similar Products", product_id],
     queryFn: ({ signal }) => getSimilarProducts({ signal, pid: product_id }),
+    staleTime: 0,
   });
 
   if (isError) {

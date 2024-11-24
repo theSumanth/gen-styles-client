@@ -13,11 +13,7 @@ const SimilarProducts = ({ fetchedProducts, isFetching }) => {
 
           {fetchedProducts &&
             fetchedProducts.map((product) => (
-              <SimilarProductCard
-                key={product._id}
-                productData={product}
-                productFromQueryKey={"Similar Products"}
-              />
+              <SimilarProductCard key={product._id} productData={product} />
             ))}
         </ul>
       </div>
