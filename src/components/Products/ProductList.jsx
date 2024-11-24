@@ -1,4 +1,4 @@
-import { Flame, Sparkles } from "lucide-react";
+import { Flame, Search, Sparkles } from "lucide-react";
 import ProductCard from "./ProductCard";
 import SkeletonProductCard from "../Skeletons/SkeletonProductCard";
 
@@ -6,6 +6,7 @@ function SectionHeader({ listHeading }) {
   const LucideIcons = {
     "Trending Products": Flame,
     "Personalized Products": Sparkles,
+    "Searched Products": Search,
   };
 
   const Icon = LucideIcons[listHeading];
@@ -13,7 +14,7 @@ function SectionHeader({ listHeading }) {
   return (
     <div className="relative flex items-center justify-center text-lg font-bold text-neutral-500 z-0">
       <h2 className="flex sm:bg-none md:bg-neutral-50 px-8">
-        <Icon size={23} className="mx-2" /> {listHeading}
+        <Icon size={22} className="mx-2" /> {listHeading}
       </h2>
       <span className="sm:w-0 border-t-2 absolute md:w-[72%] z-[-10]"></span>
     </div>
