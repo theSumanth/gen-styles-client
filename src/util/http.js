@@ -38,6 +38,18 @@ export async function getSimilarProducts({ signal, pid }) {
   }
 }
 
+export async function getAISearchProducts({ signal, queryText }) {
+  try {
+    const response = await axiosApi.get(`/api/openai/get-products/aisearch`, {
+      signal,
+      params: { query: queryText },
+    });
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
 export async function getSingleProduct({ signal, productId, pid }) {
   const user = getUserFromLocalStorage();
   let url = `/api/catalogue/get-product?_id=${productId}`;

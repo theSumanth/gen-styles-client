@@ -10,6 +10,7 @@ import {
   setUserToLocalStorage,
 } from "../util/localStorage";
 import { selfReq } from "../util/authHttp";
+import SearchContextProvider from "./SearchContextProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
@@ -33,6 +34,8 @@ const UserContextProvider = ({ children }) => {
   useEffect(() => {
     if (data) {
       storeUser(data);
+    } else {
+      clearUser(data);
     }
   }, [data]);
 
@@ -56,7 +59,9 @@ const UserContextProvider = ({ children }) => {
   return (
     <UserContext.Provider value={userContext}>
       <SkeletonTheme baseColor="#D5D3E5" highlightColor="#F1F0F6">
-        <CartContextProvider>{children}</CartContextProvider>
+        <SearchContextProvider>
+          <CartContextProvider>{children}</CartContextProvider>
+        </SearchContextProvider>
       </SkeletonTheme>
     </UserContext.Provider>
   );

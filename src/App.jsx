@@ -12,6 +12,7 @@ import RootLayout from "./pages/Root";
 import HomePage from "./pages/Home";
 import Auth from "./pages/Auth";
 import CartLayout from "./pages/Cart";
+import SearchResults from "./pages/SearchResults";
 import ProductDetail from "./pages/ProductDetail";
 import UserContextProvider from "./store/UserContextProvider";
 import ErrorBoundary from "./pages/Error";
@@ -31,6 +32,7 @@ const routeDefinitions = createRoutesFromElements(
       }
     >
       <Route index element={<HomePage />} />
+      <Route path="search" element={<SearchResults />} />
       <Route path=":productId" element={<ProductDetail />} />
       <Route path="cart" element={<CartLayout />} />
       <Route path="auth" element={<Auth />} />

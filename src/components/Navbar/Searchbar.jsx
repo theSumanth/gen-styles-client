@@ -1,46 +1,84 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useContext, useState } from "react";
 
-import stars from "../../assets/stars.png";
-import aiSearchImg from "../../assets/search.png";
+import aiTextSearchImg from "../../assets/search.png";
+import aiVoiceSearchImg from "../../assets/voice.png";
+import aiImageSearchImg from "../../assets/image-search.png";
+import { ChevronDown } from "lucide-react";
+import { SearchContext } from "../../store/SearchContextProvider";
+import { useNavigate } from "react-router-dom";
 
 const Searchbar = () => {
-  const [animateSearchbar, setAnimateSearchbar] = useState(false);
+  const [isSearchTypeClicked, setIsSearchTypeClicked] = useState(false);
+  const navigate = useNavigate();
 
-  const rainbowShadow = [
-    "0px 8px 16px -2px rgba(0, 0, 255, 0.3)", // Blue
-    "0px 8px 16px -2px rgba(255,92,205, 0.5)", // pink
-    "0px 8px 16px -2px rgba(116, 110, 234, 0.5)", // customblue
-  ];
+  const {
+    searchRef,
+    getSearchText,
+    selectedSearchType,
+    setSelectedSearchType,
+    fetchAISearch,
+  } = useContext(SearchContext);
+
+  const searchIconimages = {
+    "Text Search": aiTextSearchImg,
+    "Voice Search": aiVoiceSearchImg,
+    "Image Search": aiImageSearchImg,
+  };
+
+  function handleSearchTypeClick() {
+    setIsSearchTypeClicked((prev) => !prev);
+  }
+
+  function textSearch() {
+    console.log("in text search function");
+    navigate("/search");
+    fetchAISearch({ queryText: getSearchText() });
+  }
 
   const handleSearchClick = () => {
-    setAnimateSearchbar((prev) => !prev);
+    console.log(getSearchText());
+    switch (selectedSearchType) {
+      case "Text Search":
+        return textSearch();
+      case "Voice Search":
+        return () => {};
+      case "Image Search":
+        return () => {};
+      default:
+        console.error("Invalid search type");
+    }
   };
 
   return (
-    <motion.div
-      animate={{
-        boxShadow: animateSearchbar ? rainbowShadow : "",
-      }}
-      transition={{
-        duration: 2,
-        ease: "easeInOut",
-        repeat: Infinity,
-        repeatType: "loop",
-      }}
-      className="relative w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full"
-    >
+    <motion.div className="relative w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full">
       <input
+        ref={searchRef}
         type="text"
-        className="w-full h-14 rounded-full pl-12 pr-14 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
+        className="w-full h-14 rounded-full pl-32 pr-14 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
         placeholder="Search GenStyles"
       />
-      <div className="absolute left-2 h-10 rounded-full px-3 text-neutral-600 font-medium flex items-center justify-center">
-        <img
-          src={stars}
-          alt="ai sparkle icon"
-          className="w-5 h-5 object-cover filter brightness-0 opacity-50"
-        />
+      <div
+        onClick={handleSearchTypeClick}
+        className="absolute left-2 w-28 h-10 rounded-full px-1 bg-customBlue bg-opacity-70 hover:bg-opacity-100 cursor-pointer text-white font-medium flex items-center justify-center"
+      >
+        <div className="relative flex items-center justify-center gap-1">
+          <motion.span
+            animate={{ rotate: isSearchTypeClicked ? 180 : 0 }}
+            transition={{ type: "spring", stiffness: 300, damping: 20 }}
+            className="absolute -left-1"
+          >
+            <ChevronDown size={18} />
+          </motion.span>
+          <span className="text-xs ml-4">{selectedSearchType}</span>
+
+          {isSearchTypeClicked && (
+            <SearchDropDown
+              selectedSearchType={selectedSearchType}
+              onSelect={setSelectedSearchType}
+            />
+          )}
+        </div>
       </div>
       <motion.button
         initial={{ scale: 0.8, opacity: 0 }}
@@ -50,7 +88,7 @@ const Searchbar = () => {
         className="absolute right-2 h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
       >
         <motion.img
-          src={aiSearchImg}
+          src={searchIconimages[selectedSearchType]}
           alt="ai sparkle icon"
           initial={{ scale: 1.4 }}
           animate={{ scale: 1, transition: { duration: 2 } }}
@@ -62,7 +100,6 @@ const Searchbar = () => {
             scale: 0.99,
             transition: { duration: 0.4, ease: "easeInOut" },
           }}
-          // transition={{ duration: 2 }}
           className="w-5 h-5 filter invert brightness-0"
         />
       </motion.button>
@@ -71,3 +108,27 @@ const Searchbar = () => {
 };
 
 export default Searchbar;
+
+function SearchDropDown({ selectedSearchType, onSelect }) {
+  const searchTypes = ["Text Search", "Voice Search", "Image Search"];
+
+  return (
+    <div className="absolute top-10 w-28 flex flex-col items-center justify-center bg-white rounded-md shadow-md">
+      {searchTypes.map((type) => {
+        const isDisabled = selectedSearchType === type;
+        return (
+          <button
+            key={type}
+            disabled={isDisabled}
+            onClick={() => onSelect(type)}
+            className={`p-1 w-28 text-xs text-neutral-500 rounded-md hover:bg-customBlue hover:text-white ${
+              isDisabled ? "bg-customBlue bg-opacity-50 text-white" : ""
+            }`}
+          >
+            {type}
+          </button>
+        );
+      })}
+    </div>
+  );
+}

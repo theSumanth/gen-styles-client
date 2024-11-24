@@ -24,7 +24,7 @@ const ProductCard = ({ productData }) => {
         <NavLink to={`/${_id}?product_id=${product_id}`} className="block">
           <div>
             <div className="h-full">
-              <img src={images[0]} alt="" className="rounded-md" />
+              <img src={images[0]} alt="Product card" className="rounded-md" />
             </div>
           </div>
         </NavLink>
