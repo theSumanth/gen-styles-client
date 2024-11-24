@@ -45,7 +45,6 @@ const CartContextProvider = ({ children }) => {
     const syncCart = async () => {
       if (userId) {
         try {
-          console.log("fetch cart");
           const resData = await getUserCart({ userId });
           const fetchedCart = transformCartForClient(resData);
           setCartItems(fetchedCart);

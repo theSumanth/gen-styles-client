@@ -14,10 +14,10 @@ export async function getTop20TrendProducts({ signal }) {
   }
 }
 
-export async function getPersonalizedProducts({ signal }) {
+export async function getPersonalizedProducts({ signal, userId }) {
   try {
     const response = await axiosApi.get(
-      "/api/openai/get-products/personalized?userId=1",
+      `/api/openai/get-products/personalized?userId=${userId}`,
       { signal }
     );
     return response.data;
