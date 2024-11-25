@@ -1,13 +1,13 @@
 import { motion } from "framer-motion";
 import { useContext, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
-
 import AiSearchSvg from "../../assets/AiSearchSvg";
 import AiVoiceSearchSvg from "../../assets/AiVoiceSearchSvg";
 import AiImageSearchSvg from "../../assets/AiImageSearchSvg";
-
 import { toast } from "sonner";
 import { quantum } from "ldrs";
+import initSocket from "../../config/initSocket";
+import recordRTC from "../../config/recordRTC";
 
 quantum.register();
 
@@ -22,6 +22,11 @@ const Searchbar = () => {
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
   const imageInputRef = useRef();
   const navigate = useNavigate();
+  const socketRef = useRef(null);
+  const [isRecording, setIsRecording] = useState(false); // State to toggle recording
+  const recordRef = useRef(null); // Ref to store MediaRecorder instance
+  const mediaStreamRef = useRef(null);
+  const [transcription, setTranscription] = useState("");
 
   const {
     searchRef,
@@ -88,13 +93,57 @@ const Searchbar = () => {
     }
   };
 
+  const startRecording = async () => {
+    try {
+        if (!socketRef.current) {
+            socketRef.current = await initSocket();
+            socketRef.current.on("transcription", (data) => {
+                console.log(data);
+                if (data.text && data.text !== '') {
+                    setTranscription(data.text);
+                }
+            });
+        }
+        socketRef.current.emit('startRecording');
+        const recorder = await recordRTC(socketRef, mediaStreamRef)
+        recordRef.current = recorder;
+        recorder.startRecording();
+        setIsRecording(true);
+    } catch (error) {
+        console.error("Error starting recording:", error);
+    }
+};
+
+const stopRecording = () => {
+    try {
+        if (recordRef.current) {
+            recordRef.current.stopRecording();
+            recordRef.current = null;
+        }
+        if (mediaStreamRef.current) {
+            mediaStreamRef.current.getTracks().forEach(track => track.stop());
+            mediaStreamRef.current = null;
+        }
+        setIsRecording(false);
+        if (socketRef.current) {
+            socketRef.current.disconnect();
+            socketRef.current = null;
+        }
+    } catch (error) {
+        console.error("Error stopping recording:", error);
+    }
+};
+
   return (
+    <>
     <motion.div className="relative w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full">
       <input
         ref={searchRef}
         type="text"
         className="w-full h-14 rounded-full pl-32 pr-14 text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
         placeholder="Search GenStyles"
+        value={transcription}
+        onChange={(e)=>setTranscription(e.target.value)}
       />
       <div
         onClick={handleSearchTypeClick}
@@ -182,6 +231,12 @@ const Searchbar = () => {
         </Modal>
       )}
     </motion.div>
+    <div>
+        <button onClick={isRecording ? stopRecording : startRecording}>
+          {isRecording ? "Stop Recording" : "Start Recording"}
+        </button>
+      </div>
+    </>
   );
 };
 
