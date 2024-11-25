@@ -7,8 +7,6 @@ import { getAIImageSearchProducts, getAISearchProducts } from "../util/http";
 export const SearchContext = createContext({
   searchRef: null,
   searchedProducts: null,
-  selectedSearchType: null,
-  setSelectedSearchType: () => {},
   getSearchText: () => {},
   imageFile: null,
   setImageFile: () => {},
@@ -20,7 +18,6 @@ export const SearchContext = createContext({
 
 const SearchContextProvider = ({ children }) => {
   const searchRef = useRef(null);
-  const [selectedSearchType, setSelectedSearchType] = useState("Text Search");
   const [searchedProducts, setSearchedProducts] = useState([]);
   const [imageFile, setImageFile] = useState(null);
 
@@ -44,8 +41,8 @@ const SearchContextProvider = ({ children }) => {
     isError: isAISearchError,
     error: aiSearchError,
   } = useMutation({
-    mutationFn: async ({ signal }) => {
-      switch (selectedSearchType) {
+    mutationFn: async ({ signal, searchType }) => {
+      switch (searchType) {
         case "Text Search":
           console.log("in mutation");
           return await textSearchMutation({
@@ -66,8 +63,6 @@ const SearchContextProvider = ({ children }) => {
   const searchContext = {
     searchRef,
     searchedProducts,
-    selectedSearchType,
-    setSelectedSearchType,
     getSearchText,
     imageFile,
     setImageFile,

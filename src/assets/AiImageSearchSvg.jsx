@@ -3,12 +3,6 @@ import { motion } from "framer-motion";
 const AiImageSearchSvg = () => {
   return (
     <motion.svg
-      initial={{ scale: 1.4 }}
-      animate={{ scale: 1, transition: { duration: 2 } }}
-      whileHover={{
-        scale: 1.3,
-        transition: { duration: 0.2, ease: "easeInOut" },
-      }}
       whileTap={{
         scale: 0.99,
         transition: { duration: 0.4, ease: "easeInOut" },
@@ -20,38 +14,32 @@ const AiImageSearchSvg = () => {
       height="512"
       x="0"
       y="0"
-      viewBox="0 0 64 64"
+      viewBox="0 0 24 24"
       style={{ enableBackground: "new 0 0 512 512" }}
       xmlSpace="preserve"
-      className="w-5 h-5"
+      className="w-8 h-8 rounded-md hover:shadow-md transition-all p-1"
     >
       <g>
-        <linearGradient
-          id="a"
-          x1="78.644"
-          x2="25.425"
-          y1="74.123"
-          y2="11.863"
-          gradientUnits="userSpaceOnUse"
-        >
-          <stop stopOpacity="1" stopColor="#ffffff" offset="0.003"></stop>
-          <stop stopOpacity="1" stopColor="#ffffff" offset="1"></stop>
-        </linearGradient>
-        <g fill="url(#a)" fillRule="evenodd" clipRule="evenodd">
+        <g data-name="Layer 57">
           <path
-            d="M38.143 17.571a4.857 4.857 0 1 0 0 9.715 4.857 4.857 0 0 0 0-9.715z"
-            fill=""
+            d="M22 11.25a.76.76 0 0 0-.75.75v4l-4.18-4.78a2.85 2.85 0 0 0-4.15 0l-2.86 3.28-.94-1.14a2.76 2.76 0 0 0-4.24 0l-2.13 2.57V6A3.26 3.26 0 0 1 6 2.75h7a.75.75 0 0 0 0-1.5H6A4.75 4.75 0 0 0 1.25 6v12a.09.09 0 0 0 0 .05A4.75 4.75 0 0 0 6 22.75h12a4.74 4.74 0 0 0 4.74-4.68V12a.76.76 0 0 0-.74-.75z"
+            fill="#746eea"
             opacity="1"
+            data-original="#000000"
           ></path>
-          <path
-            d="M31 9C18.85 9 9 18.85 9 31s9.85 22 22 22 22-9.85 22-22S43.15 9 31 9zM13 31c0-9.941 8.059-18 18-18s18 8.059 18 18c0 4.758-1.846 9.084-4.86 12.303l-11.17-13.2c-4.626-5.468-13.237-4.849-17.034 1.226L13.5 35.228A18.05 18.05 0 0 1 13 31z"
-            fill=""
+          <circle
+            cx="7"
+            cy="7"
+            r="2"
+            fill="#746eea"
             opacity="1"
-          ></path>
+            data-original="#000000"
+          ></circle>
           <path
-            d="M51.463 10.486c-11.316-11.315-29.661-11.315-40.977 0-11.315 11.316-11.315 29.661 0 40.977C21.326 62.303 38.618 62.758 50 52.829l8.586 8.585a2 2 0 1 0 2.828-2.828L52.83 50c9.929-11.382 9.474-28.674-1.366-39.514zm-38.148 2.829c9.753-9.753 25.566-9.753 35.32 0 9.752 9.753 9.752 25.566 0 35.32s-25.567 9.752-35.32 0c-9.753-9.754-9.753-25.567 0-35.32z"
-            fill=""
+            d="M18 8.75a3.73 3.73 0 0 0 2.06-.62l1.41 1.4a.75.75 0 0 0 1.06 0 .75.75 0 0 0 0-1.06l-1.4-1.41A3.75 3.75 0 1 0 18 8.75zm0-6a2.25 2.25 0 0 1 1.59 3.84A2.25 2.25 0 1 1 18 2.75z"
+            fill="#746eea"
             opacity="1"
+            data-original="#000000"
           ></path>
         </g>
       </g>
