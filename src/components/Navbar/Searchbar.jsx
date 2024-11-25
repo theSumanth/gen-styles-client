@@ -192,14 +192,18 @@ function SearchDropDown({ selectedSearchType, onSelect }) {
 
   return (
     <div className="absolute top-10 w-28 flex flex-col items-center justify-center bg-white rounded-md shadow-md">
-      {searchTypes.map((type) => {
+      {searchTypes.map((type, index) => {
         const isDisabled = selectedSearchType === type;
+        const roundedBorders = { 0: "rounded-t-md", 1: "", 2: "rounded-b-md" };
+
         return (
           <button
             key={type}
             disabled={isDisabled}
             onClick={() => onSelect(type)}
-            className={`p-1 w-28 text-xs text-neutral-500 rounded-md hover:bg-customBlue hover:text-white ${
+            className={`p-1 w-28 text-xs text-neutral-500 ${
+              roundedBorders[index]
+            } hover:bg-customBlue hover:text-white ${
               isDisabled ? "bg-customBlue bg-opacity-50 text-white" : ""
             }`}
           >
