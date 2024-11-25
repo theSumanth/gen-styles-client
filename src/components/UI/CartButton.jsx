@@ -48,7 +48,7 @@ const CartButton = ({
           key={quantity}
           animate={{ scale: [1, 1.1, 1] }}
           transition={{ duration: 0.3 }}
-          className="hidden md:block absolute text-xs right-[-2px] top-[-4px] font-medium bg-red-500 rounded-full px-1"
+          className="absolute text-xs right-[-2px] top-[-4px] font-medium bg-red-500 rounded-full px-1"
         >
           {quantity}
         </motion.span>

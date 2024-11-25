@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { NavLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 
 import Button from "../UI/Button";
@@ -14,32 +14,33 @@ import { logOut as logOutHttpFn } from "../../util/authHttp";
 import { CartContext } from "../../store/CartContextProvider";
 import { queryClient } from "../../util/api";
 
-function AuthActionButtons() {
+export function AuthActionButtons({ className, burgerOnClick }) {
+  const navigate = useNavigate();
   return (
     <>
-      <NavLink to={"/auth?mode=signup"}>
-        <Button
-          className={
-            "hidden md:block hover:bg-customBackground hover:border-neutral-200 text-base whitespace-nowrap rounded-full"
-          }
-        >
-          Sign Up
-        </Button>
-      </NavLink>
-      <NavLink to={"/auth?mode=login"}>
-        <Button
-          className={
-            "hidden md:block text-white bg-customBlue text-base whitespace-nowrap rounded-full"
-          }
-        >
-          Log In
-        </Button>
-      </NavLink>
+      <Button
+        onClick={() => {
+          if (burgerOnClick) burgerOnClick();
+          navigate("/auth?mode=signup");
+        }}
+        className={`hidden md:block hover:bg-customBackground hover:border-neutral-200 text-base whitespace-nowrap rounded-full ${className}`}
+      >
+        Sign Up
+      </Button>
+      <Button
+        onClick={() => {
+          if (burgerOnClick) burgerOnClick();
+          navigate("/auth?mode=login");
+        }}
+        className={`hidden md:block text-white bg-customBlue text-base whitespace-nowrap rounded-full ${className}`}
+      >
+        Log In
+      </Button>
     </>
   );
 }
 
-function LogoutActionButton() {
+export function LogoutActionButton({ className }) {
   const userContext = useContext(UserContext);
   const cartContext = useContext(CartContext);
 
@@ -62,9 +63,7 @@ function LogoutActionButton() {
       label={"Log Out"}
       LucideIcon={LogOut}
       onClick={handleLogoutClick}
-      className={
-        "hidden ml-3 md:flex !bg-transparent !text-red-500 border !text-xs border-red-400 !font-xs !py-1 hover:!bg-red-500 hover:!text-white transition-all"
-      }
+      className={`hidden ml-3 md:flex !bg-transparent !text-red-500 border !text-xs border-red-400 !font-xs !py-1 hover:!bg-red-500 hover:!text-white transition-all ${className}`}
     />
   );
 }
@@ -87,7 +86,7 @@ const Navbar = ({ isAuthenticated }) => {
         />
 
         {isAuthenticated && <LogoutActionButton />}
-        <Burger />
+        <Burger isAuthenticated={isAuthenticated} />
       </div>
     </nav>
   );
