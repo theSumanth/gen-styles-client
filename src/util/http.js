@@ -50,6 +50,24 @@ export async function getAISearchProducts({ signal, queryText }) {
   }
 }
 
+export async function getAIImageSearchProducts({ signal, formData }) {
+  try {
+    const response = await axiosApi.post(
+      `/api/openai/get-products/image-search`,
+      formData,
+      {
+        signal,
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+
 export async function getSingleProduct({ signal, productId, pid }) {
   const user = getUserFromLocalStorage();
   let url = `/api/catalogue/get-product?_id=${productId}`;

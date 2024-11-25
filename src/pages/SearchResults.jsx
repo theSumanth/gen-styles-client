@@ -1,8 +1,8 @@
 import { useContext } from "react";
 
-import { helix } from "ldrs";
+import { quantum } from "ldrs";
 
-helix.register();
+quantum.register();
 
 import ProductList from "../components/Products/ProductList";
 import { SearchContext } from "../store/SearchContextProvider";
@@ -13,7 +13,7 @@ const SearchResults = () => {
   if (isFetchingAISearch) {
     return (
       <div className="flex flex-col gap-2 justify-center items-center mt-44">
-        <l-helix size="90" speed="2" color="#746eaa"></l-helix>
+        <l-quantum size="90" speed="2" color="#746eaa"></l-quantum>
         <span className="text-sm text-neutral-500 my-2">Searching...</span>
       </div>
     );

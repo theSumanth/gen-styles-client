@@ -1,7 +1,7 @@
 import { createContext, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
-import { getAISearchProducts } from "../util/http";
+import { getAIImageSearchProducts, getAISearchProducts } from "../util/http";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const SearchContext = createContext({
@@ -10,6 +10,8 @@ export const SearchContext = createContext({
   selectedSearchType: null,
   setSelectedSearchType: () => {},
   getSearchText: () => {},
+  imageFile: null,
+  setImageFile: () => {},
   fetchAISearch: () => {},
   isFetchingAISearch: null,
   isAISearchError: null,
@@ -20,13 +22,20 @@ const SearchContextProvider = ({ children }) => {
   const searchRef = useRef(null);
   const [selectedSearchType, setSelectedSearchType] = useState("Text Search");
   const [searchedProducts, setSearchedProducts] = useState([]);
+  const [imageFile, setImageFile] = useState(null);
 
   function getSearchText() {
     return searchRef.current.value;
   }
 
-  const textMutation = async ({ signal, queryText }) => {
+  const textSearchMutation = async ({ signal, queryText }) => {
     return await getAISearchProducts({ signal, queryText });
+  };
+
+  const imageSearchMutation = async ({ signal, imageBlob }) => {
+    const formData = new FormData();
+    formData.append("image", imageBlob);
+    return await getAIImageSearchProducts({ signal, formData });
   };
 
   const {
@@ -35,16 +44,18 @@ const SearchContextProvider = ({ children }) => {
     isError: isAISearchError,
     error: aiSearchError,
   } = useMutation({
-    mutationFn: async ({ signal, queryText }) => {
-      console.log("in out mutation");
+    mutationFn: async ({ signal }) => {
       switch (selectedSearchType) {
         case "Text Search":
           console.log("in mutation");
-          return await textMutation({ signal, queryText });
+          return await textSearchMutation({
+            signal,
+            queryText: getSearchText(),
+          });
         case "Voice Search":
           return () => {};
         case "Image Search":
-          return () => {};
+          return await imageSearchMutation({ signal, imageBlob: imageFile });
       }
     },
     onSuccess: (data) => {
@@ -58,6 +69,8 @@ const SearchContextProvider = ({ children }) => {
     selectedSearchType,
     setSelectedSearchType,
     getSearchText,
+    imageFile,
+    setImageFile,
     fetchAISearch,
     isFetchingAISearch,
     isAISearchError,
