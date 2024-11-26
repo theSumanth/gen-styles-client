@@ -1,16 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 // import { Menu, X } from "lucide-react";
-import { AuthActionButtons, LogoutActionButton } from "./Navbar";
 import CartButton from "../UI/CartButton";
+import { UserContext } from "../../store/UserContextProvider";
+import { CircleUserRound } from "lucide-react";
+import { AuthActionButtons, LogoutActionButton } from "./Navbar";
 
 const Burger = ({ isAuthenticated }) => {
   const navigate = useNavigate();
   const [isMenuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef(null);
   const buttonRef = useRef(null);
+
+  const { user } = useContext(UserContext);
 
   const toggleMenu = () => {
     setMenuOpen((prev) => !prev);
@@ -84,13 +88,19 @@ const Burger = ({ isAuthenticated }) => {
             ref={menuRef}
             className="absolute right-0 top-12 w-52 flex flex-col justify-center items-center gap-2 bg-white p-4 rounded-md shadow-md"
           >
-            <h5 className="text-customBlue font-bold text-sm py-1">
-              GenStyles{" "}
-              <span className="text-neutral-500 border-b border-neutral-400 py-1">
-                Official
-              </span>
-            </h5>
             <div className="flex justify-center items-center gap-2">
+              {isAuthenticated && (
+                <main>
+                  <div className="flex gap-2 justify-center items-center">
+                    <CircleUserRound size={18} className="text-neutral-500" />
+                    <span className="text-sm text-neutral-500">
+                      {user.firstName} {user.lastName}
+                    </span>
+                  </div>
+                  <span className="text-xs text-neutral-400">{user.email}</span>
+                </main>
+              )}
+
               {!isAuthenticated && (
                 <AuthActionButtons
                   className={"!block"}
@@ -112,6 +122,13 @@ const Burger = ({ isAuthenticated }) => {
               showCartQuantity
               className={"relative md:flex"}
             />
+
+            <h5 className="text-customBlue font-bold text-sm py-1 mt-4">
+              GenStyles{" "}
+              <span className="text-neutral-500 border-b border-neutral-400 py-1">
+                Official
+              </span>
+            </h5>
           </motion.div>
         )}
       </AnimatePresence>

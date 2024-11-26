@@ -6,9 +6,15 @@ quantum.register();
 
 import ProductList from "../components/Products/ProductList";
 import { SearchContext } from "../store/SearchContextProvider";
+import ErrorBoundary from "./Error";
 
 const SearchResults = () => {
-  const { searchedProducts, isFetchingAISearch } = useContext(SearchContext);
+  const {
+    searchedProducts,
+    isFetchingAISearch,
+    isAISearchError,
+    aiSearchError,
+  } = useContext(SearchContext);
 
   if (isFetchingAISearch) {
     return (
@@ -16,6 +22,15 @@ const SearchResults = () => {
         <l-quantum size="90" speed="2" color="#746eaa"></l-quantum>
         <span className="text-sm text-neutral-500 my-2">Searching...</span>
       </div>
+    );
+  }
+
+  if (isAISearchError) {
+    return (
+      <ErrorBoundary
+        title={"Could not search the products."}
+        message={aiSearchError.message}
+      />
     );
   }
 

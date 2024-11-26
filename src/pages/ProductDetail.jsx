@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams, useSearchParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useQuery } from "@tanstack/react-query";
 
@@ -21,6 +21,8 @@ const ProductDetail = () => {
 
   const [selectedSize, setSelectedSize] = useState(undefined);
   const [index, setIndex] = useState(0);
+
+  const navigate = useNavigate();
 
   const {
     data: fetchedProduct,
@@ -45,7 +47,7 @@ const ProductDetail = () => {
       <ErrorBoundary
         title={"Failed to fetch the product"}
         message={error.message}
-        className={"mt-32"}
+        className={"!mt-32"}
       />
     );
   }
@@ -105,7 +107,13 @@ const ProductDetail = () => {
           </div>
         </aside>
 
-        <section className="flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
+        <section className="relative flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
+          <button
+            onClick={() => navigate("..")}
+            className="absolute right-5 top-5 hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
+          >
+            Back
+          </button>
           <h4 className="text-lg font-medium">{title}</h4>
           <div className="flex flex-col">
             <p className="flex gap-2">

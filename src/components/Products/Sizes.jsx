@@ -13,7 +13,7 @@ const Sizes = ({ sizes, selectedSize, setSelectedSize, className }) => {
           onClick={() => toggleSelectSize(size)}
           className={`py-1 px-2 rounded border hover:text-customBlue hover:scale-105 hover:border-customBlue transition-all cursor-pointer ${
             selectedSize === size
-              ? "scale-105 text-white bg-customBlue hover:!text-white font-semibold"
+              ? "scale-105 text-white bg-green-400 hover:!text-white hover:border-green-400 font-semibold"
               : "border-neutral-400"
           }`}
         >

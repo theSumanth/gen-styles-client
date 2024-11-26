@@ -8,8 +8,8 @@ export const SearchContext = createContext({
   searchRef: null,
   searchedProducts: null,
   getSearchText: () => {},
-  imageFile: null,
-  setImageFile: () => {},
+  imageObj: null,
+  setImageObj: () => {},
   fetchAISearch: () => {},
   isFetchingAISearch: null,
   isAISearchError: null,
@@ -19,7 +19,10 @@ export const SearchContext = createContext({
 const SearchContextProvider = ({ children }) => {
   const searchRef = useRef(null);
   const [searchedProducts, setSearchedProducts] = useState([]);
-  const [imageFile, setImageFile] = useState(null);
+  const [imageObj, setImageObj] = useState({
+    file: null,
+    url: null,
+  });
 
   function getSearchText() {
     return searchRef.current.value;
@@ -52,7 +55,10 @@ const SearchContextProvider = ({ children }) => {
         case "Voice Search":
           return () => {};
         case "Image Search":
-          return await imageSearchMutation({ signal, imageBlob: imageFile });
+          return await imageSearchMutation({
+            signal,
+            imageBlob: imageObj.file,
+          });
       }
     },
     onSuccess: (data) => {
@@ -64,8 +70,8 @@ const SearchContextProvider = ({ children }) => {
     searchRef,
     searchedProducts,
     getSearchText,
-    imageFile,
-    setImageFile,
+    imageObj,
+    setImageObj,
     fetchAISearch,
     isFetchingAISearch,
     isAISearchError,

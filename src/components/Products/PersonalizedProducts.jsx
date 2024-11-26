@@ -6,12 +6,18 @@ import CustomSquareButton from "../UI/CustomSquareButton";
 import { UserContext } from "../../store/UserContextProvider";
 import { getPersonalizedProducts } from "../../util/http";
 import { getUserFromLocalStorage } from "../../util/localStorage";
+import ErrorBoundary from "../../pages/Error";
 
 const PersonalizedProducts = () => {
   const { user } = useContext(UserContext);
   const isAuthenticated = getUserFromLocalStorage().id && user.id;
 
-  const { data: fetchedProducts, isFetching } = useQuery({
+  const {
+    data: fetchedProducts,
+    isFetching,
+    isError,
+    error,
+  } = useQuery({
     queryKey: ["Personalized products"],
     queryFn: ({ signal }) =>
       isAuthenticated
@@ -20,6 +26,15 @@ const PersonalizedProducts = () => {
     staleTime: 5 * 60 * 1000,
     cacheTime: 30 * 60 * 1000,
   });
+
+  if (isError) {
+    return (
+      <ErrorBoundary
+        title={"Could not fetch the personalized products."}
+        message={error.message}
+      />
+    );
+  }
 
   return (
     <section className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4">

@@ -44,12 +44,15 @@ export function LogoutActionButton({ className }) {
   const userContext = useContext(UserContext);
   const cartContext = useContext(CartContext);
 
+  const navigate = useNavigate();
+
   const { mutate } = useMutation({
     mutationFn: ({ authData, signal }) => logOutHttpFn({ authData, signal }),
     onSuccess: () => {
       console.log("logged out");
       userContext.clearUser();
       cartContext.clearCart();
+      navigate("/");
       queryClient.resetQueries(["auth-self"]);
     },
   });

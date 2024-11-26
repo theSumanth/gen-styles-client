@@ -1,7 +1,8 @@
 import { useContext } from "react";
 
-import PersonalizedProducts from "../components/Products/PersonalizedProducts";
+import BrandsMarquee from "../components/BrandsMarquee";
 import TrendingProducts from "../components/Products/TrendingProducts";
+import PersonalizedProducts from "../components/Products/PersonalizedProducts";
 import { UserContext } from "../store/UserContextProvider";
 import { getUserFromLocalStorage } from "../util/localStorage";
 
@@ -13,6 +14,7 @@ const HomePage = () => {
   return (
     <section className="flex flex-col gap-2">
       <TrendingProducts />
+      <BrandsMarquee />
       {isAuthenticated && <PersonalizedProducts />}
       <section></section>
     </section>

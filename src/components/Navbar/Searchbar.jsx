@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import AiSearchSvg from "../../assets/AiSearchSvg";
 import AiVoiceSearchSvg from "../../assets/AiVoiceSearchSvg";
 import AiImageSearchSvg from "../../assets/AiImageSearchSvg";
+import stars from "../../assets/stars.png";
 
 import { toast } from "sonner";
 import { mirage } from "ldrs";
@@ -14,10 +15,10 @@ import recordRTC from "../../config/recordRTC";
 
 mirage.register();
 
-import { CircleCheckBig, Sparkle, Upload } from "lucide-react";
+import { Upload } from "lucide-react";
 import { SearchContext } from "../../store/SearchContextProvider";
 import Modal from "../UI/Modal";
-import CustomSquareButton from "../UI/CustomSquareButton";
+// import CustomSquareButton from "../UI/CustomSquareButton";
 import Button from "../UI/Button";
 
 const Searchbar = () => {
@@ -30,8 +31,16 @@ const Searchbar = () => {
   const [transcription, setTranscription] = useState("");
   const [isImageModalOpen, setIsImageModalOpen] = useState(false);
 
-  const { searchRef, getSearchText, imageFile, setImageFile, fetchAISearch } =
+  const { searchRef, getSearchText, imageObj, setImageObj, fetchAISearch } =
     useContext(SearchContext);
+
+  function handleAISearchClick() {
+    if (imageObj.url) {
+      imageAISearch();
+    } else {
+      textAISearch();
+    }
+  }
 
   function textAISearch() {
     if (getSearchText().trim() === "") {
@@ -42,21 +51,24 @@ const Searchbar = () => {
     fetchAISearch({ searchType: "Text Search" });
   }
 
-  function imageSearchClick() {
-    setIsImageModalOpen(true);
-  }
-
   function imageAISearch() {
-    setIsImageModalOpen(false);
     navigate("/search");
     fetchAISearch({ searchType: "Image Search" });
+  }
+
+  function imageSearchClick() {
+    setIsImageModalOpen(true);
   }
 
   function handleImageChange(event) {
     const file = event.target.files[0];
     if (file) {
       // console.log(file);
-      setImageFile(file);
+      setImageObj({
+        file: file,
+        url: URL.createObjectURL(file),
+      });
+      setIsImageModalOpen(false);
     }
   }
 
@@ -111,44 +123,56 @@ const Searchbar = () => {
         <input
           ref={searchRef}
           type="text"
-          className="w-full h-14 rounded-full pl-11 pr-[8.3rem] text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
+          className="w-full h-14 rounded-full pl-12 pr-[8.3rem] text-sm font-normal text-neutral-600 outline-none bg-white border-2 placeholder:text-neutral-400 shadow-sm"
           placeholder="Search GenStyles"
           value={transcription}
           onChange={(e) => setTranscription(e.target.value)}
         />
         <span
-          style={{ unicodeBidi: "isolate" }}
-          className="absolute focus:outline-none left-2 h-10 rounded-full px-2 text-neutral-500 font-medium flex items-center justify-center"
+          onClick={
+            imageObj.url ? () => setImageObj({ file: null, url: null }) : null
+          }
+          className="absolute group left-2 h-10 px-2 flex items-center justify-center cursor-pointer"
         >
-          ✨
+          <img
+            src={imageObj.url ? imageObj.url : stars}
+            alt="ai sparkle icon"
+            className={`relative group w-8 h-8 rounded-md object-contain ${
+              imageObj.url
+                ? "hover:brightness-75"
+                : "p-1 filter brightness-0 opacity-50"
+            }`}
+          />
         </span>
-        <motion.button
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring" }}
-          onClick={isRecording ? stopRecording : startRecording}
-          className="absolute focus:outline-none right-[5.5rem] h-10 rounded-full px-2 text-white font-medium flex items-center justify-center"
-        >
-          <AiVoiceSearchSvg />
-        </motion.button>
-        <motion.button
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring" }}
-          onClick={imageSearchClick}
-          className="absolute focus:outline-none right-12 h-10 rounded-full px-2 text-white font-medium flex items-center justify-center"
-        >
-          <AiImageSearchSvg />
-        </motion.button>
-        <motion.button
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ type: "spring" }}
-          onClick={textAISearch}
-          className="absolute right-2 h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
-        >
-          <AiSearchSvg />
-        </motion.button>
+        <div className="absolute right-2 flex justify-center items-center gap-2">
+          <motion.button
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring" }}
+            onClick={isRecording ? stopRecording : startRecording}
+            className="rounded-full text-white font-medium flex items-center justify-center"
+          >
+            <AiVoiceSearchSvg />
+          </motion.button>
+          <motion.button
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring" }}
+            onClick={imageSearchClick}
+            className="focus:outline-none mr-1 rounded-full text-white font-medium flex items-center justify-center"
+          >
+            <AiImageSearchSvg />
+          </motion.button>
+          <motion.button
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring" }}
+            onClick={handleAISearchClick}
+            className="h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
+          >
+            <AiSearchSvg />
+          </motion.button>
+        </div>
 
         {isImageModalOpen && (
           <Modal
@@ -186,15 +210,15 @@ const Searchbar = () => {
                   Browse Files
                 </Button>
 
-                {imageFile && (
+                {/* {imageFile && (
                   <p className="absolute flex items-center justify-center gap-1 left-1/2 -translate-x-1/2 bottom-7 text-neutral-700 font-semibold text-xs">
                     <CircleCheckBig size={12} />
                     <span>{imageFile.name}</span>
                   </p>
-                )}
+                )} */}
               </div>
 
-              <CustomSquareButton
+              {/* <CustomSquareButton
                 onClick={imageAISearch}
                 disabled={!imageFile}
                 LucideIcon={Sparkle}
@@ -202,7 +226,7 @@ const Searchbar = () => {
                 className={
                   "w-full mt-5 flex items-center justify-center disabled:bg-opacity-40"
                 }
-              />
+              /> */}
             </div>
           </Modal>
         )}
