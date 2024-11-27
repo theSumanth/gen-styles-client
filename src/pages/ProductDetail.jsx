@@ -57,15 +57,24 @@ const ProductDetail = () => {
     );
   }
 
-  if (isLoading) {
-    return <SkeletonProductDetail />;
-  }
+  // if (isLoading) {
+  //   return <SkeletonProductDetail />;
+  // }
 
-  const product = fetchedProduct;
-  const { _id, title, description, price, images, sizes, fabric, style } =
-    product;
+  // const product = fetchedProduct;
+  const _id = fetchedProduct?._id;
+  const title = fetchedProduct?.title;
+  const description = fetchedProduct?.description;
+  const price = fetchedProduct?.price;
+  const images = fetchedProduct?.images;
+  const sizes = fetchedProduct?.sizes;
+  const fabric = fetchedProduct?.fabric;
+  const style = fetchedProduct?.style;
 
-  const imagesLen = images.length;
+  // const { _id, title, description, price, images, sizes, fabric, style } =
+  //   product;
+
+  const imagesLen = images?.length;
   function nextStep() {
     setIndex((prev) => (prev >= imagesLen - 1 ? 0 : prev + 1));
   }
@@ -75,117 +84,120 @@ const ProductDetail = () => {
 
   return (
     <>
-      <div className="flex p-4 flex-col md:flex-row items-center md:items-start">
-        <aside className="w-[95%] bg-white flex md:max-w-[40%] p-4 shadow-md rounded-md items-center justify-center">
-          <div
-            className="relative flex justify-center items-center h-auto w-full max-w-[400px] max-h-[500px]"
-            style={{ minHeight: "350px" }}
-          >
-            {images[index] ? (
-              <img
-                src={images[index]}
-                alt="product images"
-                className="rounded-md w-full h-auto max-w-[400px] max-h-[500px] object-contain"
+      {isLoading && <SkeletonProductDetail />}
+      {!isLoading && (
+        <div className="flex p-4 flex-col md:flex-row items-center md:items-start">
+          <aside className="w-[95%] bg-white flex md:max-w-[40%] p-4 shadow-md rounded-md items-center justify-center">
+            <div
+              className="relative flex justify-center items-center h-auto w-full max-w-[400px] max-h-[500px]"
+              style={{ minHeight: "350px" }}
+            >
+              {images[index] ? (
+                <img
+                  src={images[index]}
+                  alt="product images"
+                  className="rounded-md w-full h-auto max-w-[400px] max-h-[500px] object-contain"
+                />
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-md">
+                  <span className="text-gray-500">Loading...</span>
+                </div>
+              )}
+
+              <CarouselButton
+                onClick={prevStep}
+                className={
+                  "left-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
+                }
+              >
+                <ChevronsLeft />
+              </CarouselButton>
+              <CarouselButton
+                onClick={nextStep}
+                className={
+                  "right-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
+                }
+              >
+                <ChevronsRight />
+              </CarouselButton>
+            </div>
+          </aside>
+
+          <section className="relative flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
+            <button
+              onClick={() => navigate("..")}
+              className="absolute right-6 top-6 hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
+            >
+              Back
+            </button>
+            <h4 className="text-lg font-medium mr-14">{title}</h4>
+            <div className="flex flex-col">
+              <p className="flex gap-2">
+                <span className="text-sm font-semibold text-neutral-500 line-through">
+                  {`Rs. ${price + price * 0.2}`}
+                </span>
+                <span className="text-sm font-semibold text-red-500">{`(20% off)`}</span>
+              </p>
+
+              <h4 className="text-lg font-semibold text-neutral-700">
+                Rs. {price}
+              </h4>
+            </div>
+            <div className="flex flex-col">
+              <span className="font-semibold text-sm text-neutral-500">
+                SELECT SIZE
+              </span>
+              <Sizes
+                sizes={sizes}
+                className={"!text-sm gap-4"}
+                selectedSize={selectedSize}
+                setSelectedSize={setSelectedSize}
               />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-200 rounded-md">
-                <span className="text-gray-500">Loading...</span>
-              </div>
-            )}
+            </div>
 
-            <CarouselButton
-              onClick={prevStep}
-              className={
-                "left-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
-              }
-            >
-              <ChevronsLeft />
-            </CarouselButton>
-            <CarouselButton
-              onClick={nextStep}
-              className={
-                "right-0 top-1/2 -translate-y-1/2 rounded-full bg-customBlue"
-              }
-            >
-              <ChevronsRight />
-            </CarouselButton>
-          </div>
-        </aside>
+            <motion.div className="w-full">
+              <CartButton
+                label={"Add to Cart"}
+                selectedSize={selectedSize}
+                key={_id}
+                productData={fetchedProduct ?? null}
+                className="flex w-full py-2 z-10 md:w-[50%] lg:w-[40%] items-center justify-center hover:bg-green-400 transition-all duration-300 "
+              />
+            </motion.div>
 
-        <section className="relative flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
-          <button
-            onClick={() => navigate("..")}
-            className="absolute right-5 top-5 hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
-          >
-            Back
-          </button>
-          <h4 className="text-lg font-medium">{title}</h4>
-          <div className="flex flex-col">
-            <p className="flex gap-2">
-              <span className="text-sm font-semibold text-neutral-500 line-through">
-                {`Rs. ${price + price * 0.2}`}
-              </span>
-              <span className="text-sm font-semibold text-red-500">{`(20% off)`}</span>
-            </p>
+            <ul className="flex flex-col mt-2 text-neutral-500 list-disc marker:text-customBlue list-inside">
+              <span className="font-semibold text-xs">PRODUCT DETAILS</span>
+              <li>
+                <span className="text-xs">{description}</span>
+              </li>
+              <li>
+                <span className="text-xs">{fabric}</span>
+              </li>
+              <li>
+                <span className="text-xs">{style}</span>
+              </li>
+            </ul>
 
-            <h4 className="text-lg font-semibold text-neutral-700">
-              Rs. {price}
-            </h4>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-semibold text-sm text-neutral-500">
-              SELECT SIZE
-            </span>
-            <Sizes
-              sizes={sizes}
-              className={"!text-sm gap-4"}
-              selectedSize={selectedSize}
-              setSelectedSize={setSelectedSize}
-            />
-          </div>
-
-          <motion.div className="w-full">
-            <CartButton
-              label={"Add to Cart"}
-              selectedSize={selectedSize}
-              key={_id}
-              productData={product}
-              className="flex w-full py-2 z-10 md:w-[50%] lg:w-[40%] items-center justify-center hover:bg-green-400 transition-all duration-300 "
-            />
-          </motion.div>
-
-          <ul className="flex flex-col mt-2 text-neutral-500 list-disc marker:text-customBlue list-inside">
-            <span className="font-semibold text-xs">PRODUCT DETAILS</span>
-            <li>
-              <span className="text-xs">{description}</span>
-            </li>
-            <li>
-              <span className="text-xs">{fabric}</span>
-            </li>
-            <li>
-              <span className="text-xs">{style}</span>
-            </li>
-          </ul>
-
-          <ul className="flex flex-col mt-2 text-neutral-500 list-disc marker:text-customBlue list-inside ">
-            <span className="font-semibold text-xs">SOLD BY</span>
-            <h4 className="text-customBlue text-sm font-bold my-1">
-              GenStyles Official
-            </h4>
-            <li>
-              <span className="text-xs">90% Positive feedback</span>
-            </li>
-            <li>
-              <span className="text-xs">69 brand products</span>
-            </li>
-            <li>
-              <span className="text-xs">
-                All products comes with 3 month Warranty
-              </span>
-            </li>
-          </ul>
-        </section>
-      </div>
+            <ul className="flex flex-col mt-2 text-neutral-500 list-disc marker:text-customBlue list-inside ">
+              <span className="font-semibold text-xs">SOLD BY</span>
+              <h4 className="text-customBlue text-sm font-bold my-1">
+                GenStyles Official
+              </h4>
+              <li>
+                <span className="text-xs">90% Positive feedback</span>
+              </li>
+              <li>
+                <span className="text-xs">69 brand products</span>
+              </li>
+              <li>
+                <span className="text-xs">
+                  All products comes with 3 month Warranty
+                </span>
+              </li>
+            </ul>
+          </section>
+        </div>
+      )}
       <SimilarProducts
         fetchedProducts={fetchedSimilarProducts}
         isFetching={isFetchingSimilar}

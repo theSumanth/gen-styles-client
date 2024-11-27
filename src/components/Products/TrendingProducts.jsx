@@ -2,7 +2,6 @@ import { useQuery } from "@tanstack/react-query";
 
 import ProductList from "./ProductList";
 import ErrorBoundary from "../../pages/Error";
-import CustomSquareButton from "../UI/CustomSquareButton";
 import { getTop20TrendProducts } from "../../util/http";
 
 const TrendingProducts = () => {
@@ -33,12 +32,6 @@ const TrendingProducts = () => {
         listHeading={"Trending Products"}
         fetchedProducts={fetchedProducts}
         isFetching={isFetching}
-      />
-      <CustomSquareButton
-        label={"show more"}
-        className={
-          "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
-        }
       />
     </section>
   );

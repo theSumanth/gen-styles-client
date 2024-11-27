@@ -34,7 +34,8 @@ const Searchbar = () => {
   const { searchRef, getSearchText, imageObj, setImageObj, fetchAISearch } =
     useContext(SearchContext);
 
-  function handleAISearchClick() {
+  function handleAISearchClick(e) {
+    e.preventDefault();
     if (imageObj.url) {
       imageAISearch();
     } else {
@@ -119,7 +120,7 @@ const Searchbar = () => {
 
   return (
     <>
-      <motion.div className="relative z-10 w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full">
+      <motion.form className="relative z-10 w-[80%] custom-range:w-[40%] lg:w-[50%] md:w-[40%] flex justify-center items-center rounded-full">
         <input
           ref={searchRef}
           type="text"
@@ -146,6 +147,7 @@ const Searchbar = () => {
         </span>
         <div className="absolute right-2 flex justify-center items-center gap-2">
           <motion.button
+            type="button"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring" }}
@@ -155,6 +157,7 @@ const Searchbar = () => {
             <AiVoiceSearchSvg />
           </motion.button>
           <motion.button
+            type="button"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring" }}
@@ -164,10 +167,11 @@ const Searchbar = () => {
             <AiImageSearchSvg />
           </motion.button>
           <motion.button
+            type="submit"
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             transition={{ type: "spring" }}
-            onClick={handleAISearchClick}
+            onClick={(e) => handleAISearchClick(e)}
             className="h-10 rounded-full bg-customBlue px-2 border-2 border-[#746eea] text-white font-medium flex items-center justify-center"
           >
             <AiSearchSvg />
@@ -202,6 +206,7 @@ const Searchbar = () => {
                   Upload your file here
                 </span>
                 <Button
+                  type="button"
                   onClick={handleUploadImageClick}
                   className={
                     "md:block text-white bg-customBlue text-base whitespace-nowrap rounded-full"
@@ -250,7 +255,7 @@ const Searchbar = () => {
             </motion.div>
           )}
         </AnimatePresence>
-      </motion.div>
+      </motion.form>
     </>
   );
 };

@@ -1,5 +1,6 @@
 import { axiosApi, handleError } from "./api";
 import { getUserFromLocalStorage } from "./localStorage";
+import { getViewedProdIds, saveViewedProdIds } from "./sessionStorage";
 
 axiosApi.defaults.headers.post["Content-Type"] = "application/json";
 
@@ -70,9 +71,12 @@ export async function getAIImageSearchProducts({ signal, formData }) {
 
 export async function getSingleProduct({ signal, productId, pid }) {
   const user = getUserFromLocalStorage();
+  const viewedProdIds = getViewedProdIds();
+
   let url = `/api/catalogue/get-product?_id=${productId}`;
-  if (user) {
+  if (user && !viewedProdIds.includes(productId)) {
     url += `&userId=${user.id}&productId=${pid}`;
+    saveViewedProdIds([...viewedProdIds, productId]);
   }
   try {
     const response = await axiosApi.get(url, {

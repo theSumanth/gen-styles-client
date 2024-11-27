@@ -10,7 +10,7 @@ import { selfReq } from "../util/authHttp";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
-  user: {},
+  user: null,
   isAuthenticated: false,
   storeUser: () => {},
   clearUser: () => {},
@@ -24,7 +24,7 @@ const UserContextProvider = ({ children }) => {
   const { data } = useQuery({
     queryKey: ["auth-self"],
     queryFn: isUserLoggedInPreviously ? selfReq : null,
-    enabled: isUserLoggedInPreviously ? true : false,
+    enabled: Boolean(isUserLoggedInPreviously),
   });
 
   useEffect(() => {

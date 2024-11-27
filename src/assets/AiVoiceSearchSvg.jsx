@@ -17,7 +17,7 @@ const AiVoiceSearchSvg = () => {
       viewBox="0 0 32 32"
       style={{ enableBackground: "new 0 0 512 512" }}
       xmlSpace="preserve"
-      className="w-8 h-8 rounded-md hover:shadow-md transition-all p-1"
+      className="w-8 h-8 rounded-md hover:shadow-md transition-all p-1 outline-none"
     >
       <g>
         <path

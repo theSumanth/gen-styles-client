@@ -1,4 +1,5 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import ProductList from "./ProductList";
@@ -9,9 +10,16 @@ import { getUserFromLocalStorage } from "../../util/localStorage";
 import ErrorBoundary from "../../pages/Error";
 import { toast } from "sonner";
 
-const PersonalizedProducts = () => {
+const PersonalizedProducts = ({ showOnly10Prods }) => {
+  const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const isAuthenticated = getUserFromLocalStorage().id && user.id;
+  const isAuthenticated = getUserFromLocalStorage()?.id && user?.id;
+
+  useEffect(() => {
+    if (!showOnly10Prods) {
+      window.scrollTo(0, 0);
+    }
+  }, [showOnly10Prods]);
 
   const {
     data: fetchedProducts,
@@ -19,7 +27,7 @@ const PersonalizedProducts = () => {
     isError,
     error,
   } = useQuery({
-    queryKey: ["Personalized products"],
+    queryKey: ["Personalized products", user?.id],
     queryFn: ({ signal }) =>
       isAuthenticated
         ? getPersonalizedProducts({ signal, userId: user.id })
@@ -30,7 +38,7 @@ const PersonalizedProducts = () => {
 
   if (isError && error.status !== 200) {
     toast.error("OpenAi limit exceeded!", {
-      description: "Fetching personlized products failed. Try again later.",
+      description: "Fetching personalized products failed. Try again later.",
     });
   }
 
@@ -50,12 +58,15 @@ const PersonalizedProducts = () => {
         fetchedProducts={fetchedProducts}
         isFetching={isFetching}
       />
-      <CustomSquareButton
-        label={"show more"}
-        className={
-          "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
-        }
-      />
+      {showOnly10Prods && (
+        <CustomSquareButton
+          label={"show more"}
+          onClick={() => navigate("/personalized-products")}
+          className={
+            "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
+          }
+        />
+      )}
     </section>
   );
 };

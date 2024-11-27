@@ -21,7 +21,12 @@ function SectionHeader({ listHeading }) {
   );
 }
 
-const ProductList = ({ listHeading, fetchedProducts, isFetching }) => {
+const ProductList = ({
+  listHeading,
+  fetchedProducts,
+  isFetching,
+  showOnly10Prods,
+}) => {
   return (
     <div className="mb-3">
       <SectionHeader listHeading={listHeading} />
@@ -29,7 +34,10 @@ const ProductList = ({ listHeading, fetchedProducts, isFetching }) => {
         {isFetching && <SkeletonProductCard cardsCount={10} />}
 
         {fetchedProducts &&
-          fetchedProducts.map((product) => (
+          (showOnly10Prods
+            ? fetchedProducts.slice(0, 10)
+            : fetchedProducts
+          ).map((product) => (
             <ProductCard key={product._id} productData={product} />
           ))}
       </ul>

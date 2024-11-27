@@ -1,6 +1,5 @@
 import { useContext } from "react";
 
-import BrandsMarquee from "../components/BrandsMarquee";
 import TrendingProducts from "../components/Products/TrendingProducts";
 import PersonalizedProducts from "../components/Products/PersonalizedProducts";
 import { UserContext } from "../store/UserContextProvider";
@@ -14,9 +13,8 @@ const HomePage = () => {
   return (
     <section className="flex flex-col gap-2">
       <TrendingProducts />
-      <BrandsMarquee />
-      {isAuthenticated && <PersonalizedProducts />}
-      <section></section>
+      {/* <BrandsMarquee /> */}
+      {isAuthenticated && <PersonalizedProducts showOnly10Prods />}
     </section>
   );
 };

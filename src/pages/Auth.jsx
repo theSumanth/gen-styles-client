@@ -12,6 +12,7 @@ import Button from "../components/UI/Button";
 import { sigUp, logIn } from "../util/authHttp";
 import { CartContext } from "../store/CartContextProvider";
 import { UserContext } from "../store/UserContextProvider";
+import { saveViewedProdIds } from "../util/sessionStorage";
 
 const CustomPasswordInput = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -60,6 +61,7 @@ const Auth = () => {
       toast.success(`${authHeading} successfull`);
       userContext.storeUser(resData);
       cartContext.syncCartFromBackend({ userId: resData.id });
+      saveViewedProdIds([]);
       navigate("/");
     },
     onError: (error) => {

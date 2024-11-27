@@ -23,7 +23,7 @@ const AiSearchSvg = () => {
       viewBox="0 0 64 64"
       style={{ enableBackground: "new 0 0 512 512" }}
       xmlSpace="preserve"
-      className="w-5 h-5"
+      className="w-5 h-5 outline-none"
     >
       <g>
         <linearGradient

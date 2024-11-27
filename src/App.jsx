@@ -15,6 +15,8 @@ import CartLayout from "./pages/Cart";
 import OrdersLayout from "./pages/Orders";
 import SearchResults from "./pages/SearchResults";
 import ProductDetail from "./pages/ProductDetail";
+import ProtectedRoute from "./pages/ProtectedRoute";
+import PersonalizedProducts from "./components/Products/PersonalizedProducts";
 import AllContextProvider from "./store/AllContextProvider";
 import ErrorBoundary from "./pages/Error";
 import { queryClient } from "./util/api";
@@ -35,8 +37,9 @@ const routeDefinitions = createRoutesFromElements(
       <Route index element={<HomePage />} />
       <Route path="search" element={<SearchResults />} />
       <Route path=":productId" element={<ProductDetail />} />
+      <Route path="personalized-products" element={<ProtectedRoute><PersonalizedProducts /></ProtectedRoute>}/>
       <Route path="cart" element={<CartLayout />} />
-      <Route path="orders" element={<OrdersLayout />} />
+      <Route path="orders" element={<ProtectedRoute><OrdersLayout /></ProtectedRoute>}/>
       <Route path="auth" element={<Auth />} />
     </Route>
   </Route>
