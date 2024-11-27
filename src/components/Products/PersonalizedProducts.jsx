@@ -7,6 +7,7 @@ import { UserContext } from "../../store/UserContextProvider";
 import { getPersonalizedProducts } from "../../util/http";
 import { getUserFromLocalStorage } from "../../util/localStorage";
 import ErrorBoundary from "../../pages/Error";
+import { toast } from "sonner";
 
 const PersonalizedProducts = () => {
   const { user } = useContext(UserContext);
@@ -26,6 +27,12 @@ const PersonalizedProducts = () => {
     staleTime: 5 * 60 * 1000,
     cacheTime: 30 * 60 * 1000,
   });
+
+  if (isError && error.status !== 200) {
+    toast.error("OpenAi limit exceeded!", {
+      description: "Fetching personlized products failed. Try again later.",
+    });
+  }
 
   if (isError) {
     return (

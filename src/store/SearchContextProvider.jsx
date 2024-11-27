@@ -2,6 +2,7 @@ import { createContext, useRef, useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 
 import { getAIImageSearchProducts, getAISearchProducts } from "../util/http";
+import { toast } from "sonner";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const SearchContext = createContext({
@@ -63,6 +64,17 @@ const SearchContextProvider = ({ children }) => {
     },
     onSuccess: (data) => {
       setSearchedProducts(data);
+    },
+    onError: (error) => {
+      if (error.message === "Network Error") {
+        toast.error(error.message);
+        return;
+      }
+      if (error.status !== 200) {
+        toast.error("OpenAi limit exceeded!", {
+          description: "Searching products failed. Try again later.",
+        });
+      }
     },
   });
 

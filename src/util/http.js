@@ -105,3 +105,31 @@ export async function storeUserCart({ cartObj, signal }) {
     handleError(error);
   }
 }
+
+export async function getPurchaseHistory({ userId, signal }) {
+  try {
+    const response = await axiosApi.get(
+      `/api/purchase-history/get-purchase-history?userId=${userId}`,
+      {
+        signal,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}
+export async function storePurchaseHistory({ orderObj, signal }) {
+  try {
+    const response = await axiosApi.post(
+      `/api/purchase-history/store-purchase-history`,
+      orderObj,
+      {
+        signal,
+      }
+    );
+    return response.data;
+  } catch (error) {
+    handleError(error);
+  }
+}

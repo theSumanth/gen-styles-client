@@ -1,15 +1,21 @@
 import { useContext, useEffect, useRef, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
 import Button from "./UI/Button";
 import { CartContext } from "../store/CartContextProvider";
+import { OrderContext } from "../store/OrderContextProvider";
+import { toast } from "sonner";
 
 const CheckoutSection = () => {
   const couponInputRef = useRef();
+  const navigate = useNavigate();
   const [discountPrice, setDiscountPrice] = useState(0);
   const [isCouponValid, setIsCouponValid] = useState(undefined);
 
   const cartContext = useContext(CartContext);
+  const orderContext = useContext(OrderContext);
+
   const { cart } = cartContext;
 
   const cartIsEmpty = cart.items.length <= 0;
@@ -38,6 +44,13 @@ const CheckoutSection = () => {
     } else {
       setIsCouponValid(false);
     }
+  }
+
+  function handleCheckout() {
+    orderContext.storeOrderToApi(cart);
+    cartContext.clearCart();
+    toast.success("Purchase successfull");
+    navigate("/orders");
   }
 
   const MotionButton = motion.create(Button);
@@ -112,6 +125,7 @@ const CheckoutSection = () => {
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.99 }}
           disabled={cartIsEmpty}
+          onClick={handleCheckout}
           className={
             "text-white bg-customBlue w-full rounded-md text-xs disabled:bg-opacity-60 mt-2"
           }

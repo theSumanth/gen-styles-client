@@ -81,11 +81,19 @@ const Navbar = ({ isAuthenticated }) => {
       <div className="flex flex-row md:gap-2 w-[10%] md:w-[25%] justify-end items-center">
         {!isAuthenticated && <AuthActionButtons />}
 
+        {isAuthenticated && (
+          <CustomSquareButton
+            onClick={() => navigate("/orders")}
+            label={"Orders"}
+            className={"hidden md:flex"}
+          />
+        )}
+
         <CartButton
           onClick={() => navigate("/cart")}
-          label={"Cart"}
+          // label={"Cart"}
           showCartQuantity
-          className={"relative hidden md:flex ml-2"}
+          className={"relative hidden md:flex ml-2 !px-2 py-2 !rounded-full"}
         />
 
         {isAuthenticated && <LogoutActionButton />}

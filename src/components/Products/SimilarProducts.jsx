@@ -1,7 +1,27 @@
+import { toast } from "sonner";
+import ErrorBoundary from "../../pages/Error";
 import SkeletonSimilarProductCard from "../Skeletons/SkeletonSimilarProductCard";
 import SimilarProductCard from "./SimilarProductCard";
 
-const SimilarProducts = ({ fetchedProducts, isFetching }) => {
+const SimilarProducts = ({
+  fetchedProducts,
+  isFetching,
+  isFetchSimilarError,
+  similarFetchError,
+}) => {
+  if (isFetchSimilarError && similarFetchError.status !== 200) {
+    toast.error("OpenAi limit exceeded!", {
+      description: "Fetching similar products failed. Try again later.",
+    });
+  }
+
+  if (isFetchSimilarError) {
+    <ErrorBoundary
+      title={"Could not fetch similar products"}
+      message={similarFetchError.message}
+    />;
+  }
+
   return (
     <section className="shadow-md rounded-md">
       <div className="bg-neutral-50 mb-3 rounded-md p-4">

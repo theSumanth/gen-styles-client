@@ -36,7 +36,12 @@ const ProductDetail = () => {
     staleTime: 0,
   });
 
-  const { data: fetchedSimilarProducts, isFetchingSimilar } = useQuery({
+  const {
+    data: fetchedSimilarProducts,
+    isFetchingSimilar,
+    isError: isFetchSimilarError,
+    error: similarFetchError,
+  } = useQuery({
     queryKey: ["Similar Products", product_id],
     queryFn: ({ signal }) => getSimilarProducts({ signal, pid: product_id }),
     staleTime: 0,
@@ -184,6 +189,8 @@ const ProductDetail = () => {
       <SimilarProducts
         fetchedProducts={fetchedSimilarProducts}
         isFetching={isFetchingSimilar}
+        isFetchSimilarError={isFetchSimilarError}
+        similarFetchError={similarFetchError}
       />
     </>
   );

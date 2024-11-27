@@ -147,7 +147,7 @@ const CartContextProvider = ({ children }) => {
     } catch (error) {
       console.error("Error updating cart on backend:", error);
     }
-  }, 2500);
+  }, 0);
 
   function addToCart(item) {
     const { product, size } = item;

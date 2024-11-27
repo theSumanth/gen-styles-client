@@ -1,16 +1,12 @@
 import { createContext, useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 
-// import { SkeletonTheme } from "react-loading-skeleton";
-
-import CartContextProvider from "./CartContextProvider";
 import {
   getUserFromLocalStorage,
   removeUserFromLocalStorage,
   setUserToLocalStorage,
 } from "../util/localStorage";
 import { selfReq } from "../util/authHttp";
-import SearchContextProvider from "./SearchContextProvider";
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const UserContext = createContext({
@@ -57,13 +53,7 @@ const UserContextProvider = ({ children }) => {
   };
 
   return (
-    <UserContext.Provider value={userContext}>
-      {/* <SkeletonTheme baseColor="#D5D3E5" highlightColor="#F1F0F6"> */}
-      <SearchContextProvider>
-        <CartContextProvider>{children}</CartContextProvider>
-      </SearchContextProvider>
-      {/* </SkeletonTheme> */}
-    </UserContext.Provider>
+    <UserContext.Provider value={userContext}>{children}</UserContext.Provider>
   );
 };
 
