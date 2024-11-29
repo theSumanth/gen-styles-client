@@ -1,10 +1,21 @@
+import { forwardRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import ProductList from "./ProductList";
 import ErrorBoundary from "../../pages/Error";
 import { getTop20TrendProducts } from "../../util/http";
+import CustomSquareButton from "../UI/CustomSquareButton";
 
-const TrendingProducts = () => {
+// eslint-disable-next-line react/display-name
+const TrendingProducts = forwardRef(({ showOnly10Prods }, ref) => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    if (!showOnly10Prods) {
+      window.scrollTo(0, 0);
+    }
+  }, [showOnly10Prods]);
+
   const {
     data: fetchedProducts,
     isFetching,
@@ -27,14 +38,27 @@ const TrendingProducts = () => {
   }
 
   return (
-    <section className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4">
+    <section
+      ref={ref}
+      className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4"
+    >
       <ProductList
         listHeading={"Trending Products"}
         fetchedProducts={fetchedProducts}
         isFetching={isFetching}
+        showOnly10Prods
       />
+      {showOnly10Prods && (
+        <CustomSquareButton
+          label={"show more"}
+          onClick={() => navigate("/trending-products")}
+          className={
+            "absolute bottom-3 right-4 bg-white border border-customBlue !text-customBlue !text-xs hover:bg-customBlue hover:!text-white transition-all"
+          }
+        />
+      )}
     </section>
   );
-};
+});
 
 export default TrendingProducts;

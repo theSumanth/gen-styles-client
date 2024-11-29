@@ -16,6 +16,7 @@ import OrdersLayout from "./pages/Orders";
 import SearchResults from "./pages/SearchResults";
 import ProductDetail from "./pages/ProductDetail";
 import ProtectedRoute from "./pages/ProtectedRoute";
+import TrendingProducts from "./components/Products/TrendingProducts";
 import PersonalizedProducts from "./components/Products/PersonalizedProducts";
 import AllContextProvider from "./store/AllContextProvider";
 import ErrorBoundary from "./pages/Error";
@@ -37,6 +38,7 @@ const routeDefinitions = createRoutesFromElements(
       <Route index element={<HomePage />} />
       <Route path="search" element={<SearchResults />} />
       <Route path=":productId" element={<ProductDetail />} />
+      <Route path="trending-products" element={<TrendingProducts />} />
       <Route path="personalized-products" element={<ProtectedRoute><PersonalizedProducts /></ProtectedRoute>}/>
       <Route path="cart" element={<CartLayout />} />
       <Route path="orders" element={<ProtectedRoute><OrdersLayout /></ProtectedRoute>}/>
@@ -59,7 +61,7 @@ const router = createBrowserRouter(routeDefinitions, {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <Toaster richColors position="bottom-right" visibleToasts={3} />
+      <Toaster richColors position="top-center" visibleToasts={3} />
       <AllContextProvider>
         <RouterProvider
           future={{

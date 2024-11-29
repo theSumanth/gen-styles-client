@@ -82,11 +82,12 @@ const Navbar = ({ isAuthenticated }) => {
         {!isAuthenticated && <AuthActionButtons />}
 
         {isAuthenticated && (
-          <CustomSquareButton
+          <Button
             onClick={() => navigate("/orders")}
-            label={"Orders"}
-            className={"hidden md:flex"}
-          />
+            className={`hidden md:block text-white bg-customBlue text-base whitespace-nowrap rounded-full`}
+          >
+            Orders
+          </Button>
         )}
 
         <CartButton

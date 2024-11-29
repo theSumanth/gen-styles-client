@@ -57,6 +57,7 @@ const PersonalizedProducts = ({ showOnly10Prods }) => {
         listHeading={"Personalized Products"}
         fetchedProducts={fetchedProducts}
         isFetching={isFetching}
+        showOnly10Prods
       />
       {showOnly10Prods && (
         <CustomSquareButton

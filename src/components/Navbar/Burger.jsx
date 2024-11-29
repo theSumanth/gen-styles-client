@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 
 // import { Menu, X } from "lucide-react";
+import Button from "../UI/Button";
 import CartButton from "../UI/CartButton";
 import { UserContext } from "../../store/UserContextProvider";
 import { CircleUserRound } from "lucide-react";
@@ -108,11 +109,22 @@ const Burger = ({ isAuthenticated }) => {
                 />
               )}
             </div>
-            <div>
-              {isAuthenticated && (
-                <LogoutActionButton className={"!flex !ml-0"} />
-              )}
-            </div>
+
+            {isAuthenticated && (
+              <Button
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate("/orders");
+                }}
+                className={`flex md:hidden text-white bg-customBlue text-base whitespace-nowrap rounded-full`}
+              >
+                Orders
+              </Button>
+            )}
+
+            {isAuthenticated && (
+              <LogoutActionButton className={"!flex !ml-0"} />
+            )}
             <CartButton
               onClick={() => {
                 setMenuOpen(false);
@@ -120,7 +132,7 @@ const Burger = ({ isAuthenticated }) => {
               }}
               label={"Cart"}
               showCartQuantity
-              className={"relative md:flex"}
+              className={"relative flex md:hidden"}
             />
 
             <h5 className="text-customBlue font-bold text-sm py-1 mt-4">

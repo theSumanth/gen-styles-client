@@ -12,6 +12,8 @@
   "dependencies": {
     "@tanstack/react-query": "^5.61.0",
     "axios": "^1.7.7",
+    "embla-carousel-autoplay": "^8.5.1",
+    "embla-carousel-react": "^8.5.1",
     "framer-motion": "^11.11.13",
     "ldrs": "^1.0.2",
     "lodash.debounce": "^4.0.8",
