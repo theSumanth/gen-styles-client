@@ -1,12 +1,15 @@
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 
+import { LazyLoadImage } from "react-lazy-load-image-component";
+import "react-lazy-load-image-component/src/effects/blur.css";
+
 const images = [
-  "./slide1.jpg",
-  "./slide2.jpg",
-  "./slide3.jpg",
-  "./slide4.jpg",
-  "./slide5.jpg",
+  "./slide1.webp",
+  "./slide2.webp",
+  "./slide3.webp",
+  "./slide4.webp",
+  "./slide5.webp",
 ];
 
 function SlideImage({ imageUrl }) {
@@ -15,7 +18,12 @@ function SlideImage({ imageUrl }) {
       className="flex justify-center items-start object-cover"
       style={{ flex: "0 0 100%" }}
     >
-      <img src={imageUrl} alt="slideshow image" />
+      <LazyLoadImage
+        src={imageUrl}
+        alt="slideshow image"
+        effect="blur"
+        width="100%"
+      />
     </div>
   );
 }
@@ -31,7 +39,7 @@ export function EmblaCarousel({ onShopnowClick }) {
         </span>
         <button
           onClick={onShopnowClick}
-          className="rounded-full px-4 py-1 bg-white text-customBlue text-sm font-semibold m-2"
+          className="rounded-full px-4 py-1 bg-white text-customBlue text-lg font-semibold m-2"
         >
           Shop now
         </button>

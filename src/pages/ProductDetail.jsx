@@ -125,10 +125,10 @@ const ProductDetail = () => {
 
           <section className="relative flex flex-col gap-2 w-[95%] max-w-[42rem] sm:max-w-full md:w-[65%] items-start p-6 md:ml-6 my-2 bg-white shadow-md rounded-md md:my-0">
             <button
-              onClick={() => navigate("..")}
-              className="absolute right-6 top-6 hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
+              onClick={() => navigate(-1)}
+              className=" hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
             >
-              Back
+              Go back
             </button>
             <h4 className="text-lg font-medium mr-14">{title}</h4>
             <div className="flex flex-col">
