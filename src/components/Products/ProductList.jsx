@@ -5,7 +5,7 @@ import SkeletonProductCard from "../Skeletons/SkeletonProductCard";
 function SectionHeader({ listHeading }) {
   const LucideIcons = {
     "Trending Products": Flame,
-    "Personalized Products": Sparkles,
+    "Personalized Recommendations": Sparkles,
     "Searched Products": Search,
   };
 

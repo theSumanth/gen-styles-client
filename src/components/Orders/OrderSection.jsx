@@ -1,10 +1,13 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 import OrderProduct from "./OrderProduct";
 import { OrderContext } from "../../store/OrderContextProvider";
 
 const OrderSection = () => {
+  const navigate = useNavigate();
+
   const orderContext = useContext(OrderContext);
   const { orders } = orderContext;
 
@@ -23,7 +26,13 @@ const OrderSection = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="w-full overflow-y-auto bg-white border border-neutral-300 rounded-xl not-mobile-view:rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
     >
-      <div className="flex flex-row justify-between mb-4">
+      <button
+        onClick={() => navigate(-1)}
+        className=" hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
+      >
+        Go back
+      </button>
+      <div className="flex flex-row justify-between my-4">
         <h2 className="text-normal font-medium">
           Your Orders{" "}
           <span className="text-xs text-neutral-400">{`(${orders.length} orders)`}</span>

@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { CircleX } from "lucide-react";
@@ -7,6 +8,8 @@ import { CartContext } from "../../store/CartContextProvider";
 import CartProduct from "./CartProduct";
 
 const CartSection = () => {
+  const navigate = useNavigate();
+
   const cartContext = useContext(CartContext);
   const { cart, clearCart } = cartContext;
 
@@ -25,7 +28,13 @@ const CartSection = () => {
       transition={{ duration: 0.5, ease: "easeInOut" }}
       className="w-full overflow-y-auto lg:w-[60%] bg-white border border-neutral-300 rounded-xl not-mobile-view:rounded-3xl px-3 not-mobile-view:px-6 py-4 shadow-md"
     >
-      <div className="flex flex-row justify-between mb-4">
+      <button
+        onClick={() => navigate(-1)}
+        className=" hover:bg-customBlue hover:text-white transition-all border border-customBlue text-customBlue text-xs px-2 py-1 rounded-md"
+      >
+        Go back
+      </button>
+      <div className="flex flex-row justify-between my-4">
         <h2 className="text-normal font-medium">
           Your Cart{" "}
           <span className="text-xs text-neutral-400">{`(${cart.items.length} products)`}</span>

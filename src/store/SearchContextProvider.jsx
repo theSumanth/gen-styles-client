@@ -70,8 +70,22 @@ const SearchContextProvider = ({ children }) => {
         toast.error(error.message);
         return;
       }
-      if (error.status !== 200) {
+
+      const statusCode = error.status;
+
+      if (statusCode !== 429 && statusCode !== 500 && statusCode !== 200) {
+        toast.error("Something went wrong from our end!", {
+          description: "Searching products failed. Try again later.",
+        });
+      }
+
+      if (statusCode === 429) {
         toast.error("OpenAi limit exceeded!", {
+          description: "Searching products failed. Try again later.",
+        });
+      }
+      if (statusCode === 500) {
+        toast.error("Bad response!", {
           description: "Searching products failed. Try again later.",
         });
       }

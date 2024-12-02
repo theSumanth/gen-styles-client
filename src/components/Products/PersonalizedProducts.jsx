@@ -54,7 +54,7 @@ const PersonalizedProducts = ({ showOnly10Prods }) => {
   return (
     <section className="relative bg-neutral-50 m-2 shadow-md rounded-md p-4">
       <ProductList
-        listHeading={"Personalized Products"}
+        listHeading={"Personalized Recommendations"}
         fetchedProducts={fetchedProducts}
         isFetching={isFetching}
         showOnly10Prods

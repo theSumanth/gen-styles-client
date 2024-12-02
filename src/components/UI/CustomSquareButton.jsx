@@ -7,7 +7,7 @@ const CustomSquareButton = ({
 }) => {
   return (
     <button
-      className={`flex justify-center px-3 py-1 gap-1 text-sm items-center whitespace-nowrap bg-customBlue text-white rounded-md ${
+      className={`flex outline-none justify-center px-3 py-1 gap-1 text-sm items-center whitespace-nowrap bg-customBlue text-white rounded-md ${
         className ?? ""
       }`}
       {...props}

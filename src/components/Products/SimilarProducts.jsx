@@ -30,6 +30,9 @@ const SimilarProducts = ({
           <Sparkle size={18} /> <span>Similar Products</span>
         </h2>
         <ul className="grid xl:grid-cols-5 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 place-items-center p-4 px-11 md:px-0">
+          {fetchedProducts && fetchedProducts.length === 0 && (
+            <p className="text-neutral-500 text-sm">No products found :&#40;</p>
+          )}
           {(isFetching || !fetchedProducts) && (
             <SkeletonSimilarProductCard cardsCount={10} />
           )}

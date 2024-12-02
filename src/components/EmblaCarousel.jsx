@@ -7,7 +7,7 @@ import "react-lazy-load-image-component/src/effects/blur.css";
 const images = [
   "./slide1.webp",
   "./slide2.webp",
-  "./slide3.webp",
+  // "./slide3.webp",
   "./slide4.webp",
   "./slide5.webp",
 ];
@@ -39,7 +39,7 @@ export function EmblaCarousel({ onShopnowClick }) {
         </span>
         <button
           onClick={onShopnowClick}
-          className="rounded-full px-4 py-1 bg-white text-customBlue text-lg font-semibold m-2"
+          className="rounded-full outline-none px-4 py-1 bg-white text-customBlue text-xl font-semibold m-2"
         >
           Shop now
         </button>

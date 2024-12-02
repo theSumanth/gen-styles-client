@@ -1,4 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&family=Playwrite+NL:wght@100..400&display=swap");
+
 * {
   font-family: "Figtree", sans-serif;
   box-sizing: border-box;
@@ -7,4 +8,27 @@
 body {
   background-color: #f5f5f5;
   overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 5px; /* For vertical scrollbar */
+  height: 8px; /* For horizontal scrollbar */
+  overflow: overlay;
+}
+
+::-webkit-scrollbar-track {
+  background: #e2e2e2;
+  border-radius: 10px; /* Add border-radius to the track */
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(164, 164, 164);
+  border-radius: 10px; /* Consistent rounded corners */
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

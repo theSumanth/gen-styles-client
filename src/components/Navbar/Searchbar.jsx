@@ -129,23 +129,26 @@ const Searchbar = () => {
           value={transcription}
           onChange={(e) => setTranscription(e.target.value)}
         />
-        <span
-          onClick={
-            imageObj.url ? () => setImageObj({ file: null, url: null }) : null
-          }
-          className="absolute group left-2 h-10 px-2 flex items-center justify-center cursor-pointer"
-        >
+        <span className="absolute group left-2 h-10 px-2 flex items-center justify-center cursor-pointer">
           <img
-            src={imageObj.url ? imageObj.url : stars}
+            src={stars}
             alt="ai sparkle icon"
-            className={`relative group w-8 h-8 rounded-md object-contain ${
-              imageObj.url
-                ? "hover:brightness-75"
-                : "p-1 filter brightness-0 opacity-50"
-            }`}
+            className={`relative group w-8 h-8 rounded-md object-contain p-1 filter brightness-0 opacity-50`}
           />
         </span>
         <div className="absolute right-2 flex justify-center items-center gap-2">
+          <span
+            onClick={() => setImageObj({ file: null, url: null })}
+            className={`group h-10 items-center justify-center cursor-pointer ${
+              imageObj.url ? "flex" : "hidden"
+            }`}
+          >
+            <img
+              src={imageObj.url}
+              alt="ai sparkle icon"
+              className={`relative group w-8 h-8 rounded-md object-contain hover:brightness-75`}
+            />
+          </span>
           <motion.button
             type="button"
             initial={{ scale: 0.8, opacity: 0 }}
