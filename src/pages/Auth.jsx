@@ -102,7 +102,10 @@ const Auth = () => {
   const authHttpFn = authMode === "login" ? logIn : sigUp;
 
   return (
-    <div className="bg-customBackground pt-16">
+    <div
+      style={{ minHeight: "calc(100vh - 4.5rem)" }}
+      className="bg-customBackground flex items-center justify-center"
+    >
       <motion.form
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
