@@ -11,13 +11,13 @@ export const queryClient = new QueryClient({
 
 export const axiosApi = axios.create({
   baseURL: "http://localhost:5000",
-  timeout: 5000,
+  timeout: 50000,
   withCredentials: true,
 });
 
 export const axiosAuthApi = axios.create({
   baseURL: "http://localhost:5501",
-  timeout: 5000,
+  timeout: 50000,
   withCredentials: true,
 });
 
